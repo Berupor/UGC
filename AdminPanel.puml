@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/cerulean-outline/puml-theme-cerulean-outline.puml
+skinparam backgroundColor #F1F6F5
+skinparam ArrowThickness 1
+
+header Admin Panel
+
+frame **AdminPanel** {
+  [DjangoPanel]
+  [Nginx]
+  package StaticFiles
+  database Postgres
+  actor Менеджер as Client
+
+}
+
+Client <-> Nginx: Запрос на подключение
+Nginx <-> DjangoPanel: Подключение
+DjangoPanel <-> Postgres
+Nginx -down-> StaticFiles
+StaticFiles -> Client
+
+frame **FullTextSearch** {
+  [ETL]
+  database Elasticsearch
+}
+
+Postgres -up-> ETL: Извлечение данных
+ETL -> Elasticsearch: Загрузка данных
+
+frame **AsyncApi** {
+  database Redis
+  [FastapiApp]
+
+}
+
+
+@enduml
