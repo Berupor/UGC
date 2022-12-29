@@ -3,20 +3,20 @@
 skinparam backgroundColor #F1F6F5
 skinparam ArrowThickness 1
 
-header Admin Panel
+header =Кинопоиск
 
 frame **AdminPanel** {
   [DjangoPanel]
-  [Nginx]
+  rectangle Nginx #Technology
   package StaticFiles
   database Postgres
-  actor Менеджер as Client
+  actor Менеджеры as Client
 
 }
 
 Client -> Nginx: Запрос на подключение
 Nginx -> DjangoPanel: Подключение
-DjangoPanel <-> Postgres
+DjangoPanel <-down-> Postgres
 Nginx -down-> StaticFiles
 StaticFiles -> Client
 
@@ -25,26 +25,26 @@ frame **FullTextSearch** {
   database Elasticsearch
 }
 
-Postgres ------> ETL: Извлечение данных
 ETL -> Elasticsearch: Загрузка данных
+Postgres --> ETL: Извлечение данных
 
 frame **AsyncApi** {
-  database RedisCluster
+  database RedisCluster #Implementation
   [FastapiApp]
-  [Nginx] as Nginx2
+  rectangle Nginx as Nginx2 #Technology
   actor Клиенты as Clients
 }
 
 ETL -up-> FastapiApp
-FastapiApp <-up-> RedisCluster: Кеширование
+FastapiApp <-up-> RedisCluster
 Clients -down-> Nginx2
 Nginx2 --> FastapiApp
 
 frame **Auth** {
   database Postgres as Postgres2
-  database Redis
+  database Redis #Implementation
   [FlaskApp]
-  [Nginx] as Nginx3
+  rectangle Nginx as Nginx3 #Technology
 }
 
 FastapiApp -> Nginx3
