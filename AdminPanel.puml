@@ -14,8 +14,8 @@ frame **AdminPanel** {
 
 }
 
-Client <-> Nginx: Запрос на подключение
-Nginx <-> DjangoPanel: Подключение
+Client -> Nginx: Запрос на подключение
+Nginx -> DjangoPanel: Подключение
 DjangoPanel <-> Postgres
 Nginx -down-> StaticFiles
 StaticFiles -> Client
@@ -25,14 +25,31 @@ frame **FullTextSearch** {
   database Elasticsearch
 }
 
-Postgres -up-> ETL: Извлечение данных
+Postgres ------> ETL: Извлечение данных
 ETL -> Elasticsearch: Загрузка данных
 
 frame **AsyncApi** {
-  database Redis
+  database RedisCluster
   [FastapiApp]
-
+  [Nginx] as Nginx2
+  actor Клиенты as Clients
 }
 
+ETL -up-> FastapiApp
+FastapiApp <-up-> RedisCluster: Кеширование
+Clients -down-> Nginx2
+Nginx2 --> FastapiApp
+
+frame **Auth** {
+  database Postgres as Postgres2
+  database Redis
+  [FlaskApp]
+  [Nginx] as Nginx3
+}
+
+FastapiApp -> Nginx3
+Nginx3 --> [FlaskApp]
+[FlaskApp] -down-> Postgres2
+[FlaskApp] -down-> Redis
 
 @enduml
