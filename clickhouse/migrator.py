@@ -1,4 +1,8 @@
+import logging
+
 from clickhouse_driver import Client
+
+logging.basicConfig(level=logging.INFO)
 
 client = Client(host='clickhouse-node1')
 
@@ -24,4 +28,6 @@ def ch_table(client: Client):
 
 if __name__ == '__main__':
     ch_database(client)
+    logging.info('created clickhouse database: ugc')
     ch_table(client)
+    logging.info('created clickhouse table: views')
