@@ -36,8 +36,13 @@ LOGGING = {
         },
     },
     "loggers": {
-        "": {"handlers": LOG_DEFAULT_HANDLERS, "level": "INFO",},
-        "uvicorn.error": {"level": "INFO",},
+        "": {
+            "handlers": LOG_DEFAULT_HANDLERS,
+            "level": "INFO",
+        },
+        "uvicorn.error": {
+            "level": "INFO",
+        },
         "uvicorn.access": {
             "handlers": ["access"],
             "level": "INFO",

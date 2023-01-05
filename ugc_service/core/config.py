@@ -17,5 +17,8 @@ class Config(BaseSettings):
     # Корень проекта
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+    secret_key: str = Field(env="secret_key", default="super-secret")
+    token_algo: str = Field(env="token_algo", default="HS256")
+
     class Config:
         env_file = ".env"
