@@ -13,4 +13,4 @@ RUN apt update -y  \
 
 COPY . .
 
-CMD ["python", "migrator.py"]
+CMD ["python", "dev_migrator.py"]
