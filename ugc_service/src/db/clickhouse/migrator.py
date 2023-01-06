@@ -4,7 +4,7 @@ from clickhouse_driver import Client
 
 logging.basicConfig(level=logging.INFO)
 
-client = Client(host='clickhouse-node1')
+client = Client(host="clickhouse-node1")
 
 
 def ch_database(client: Client):
@@ -24,10 +24,12 @@ def ch_table(client: Client):
             ) 
         Engine=MergeTree() 
         ORDER BY timestamp
-        """)
+        """
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     ch_database(client)
-    logging.info('created clickhouse database: ugc')
+    logging.info("created clickhouse database: ugc")
     ch_table(client)
-    logging.info('created clickhouse table: views')
+    logging.info("created clickhouse table: views")
