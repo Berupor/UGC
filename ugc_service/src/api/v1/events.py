@@ -2,42 +2,10 @@ from http import HTTPStatus
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+
+from models.events import CommentFilm, LikeFilm, RatingFilm, ViewPointFilm
 
 router = APIRouter()
-
-
-class Event(BaseModel):
-    """Валидатор данных о просмотре фильма."""
-
-    # event_name: str = Field(default="Название события")
-    # event_value: str = Field(default="Значение события")
-
-    async def get_user_id(self, request: Request):
-        if not hasattr(request.state, "id_user"):
-            return None
-        return request.state.id_user
-
-    async def get_id(self, user_id: str, film_id: str) -> str:
-        return user_id + "-" + film_id
-
-
-class ViewPointFilm(Event):
-    viewpoint: int = Field(default=101, ge=100)
-
-
-class LikeFilm(Event):
-    like: bool = Field(default=False)
-
-
-class CommentFilm(Event):
-    comment: str = Field(default="comment")
-
-
-class RatingFilm(Event):
-    like: float = Field(default=10, ge=0, lt=10)
-
-
 
 
 @router.post(
