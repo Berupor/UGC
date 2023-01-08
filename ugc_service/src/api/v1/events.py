@@ -27,6 +27,7 @@ async def viewpoint_film(film_id: str, event: ViewPointFilm, request: Request) -
     if not id_user:
         return "User not found"
     id = await event.get_id(id_user, film_id)
+    print('\n\n\n', id)
 
     return "status"
 
