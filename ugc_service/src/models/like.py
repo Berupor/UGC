@@ -2,9 +2,9 @@ from models.base import BaseEventModel, BaseEventValue
 from pydantic import Field
 
 
-class LikeFilmValue(BaseEventValue):
+class LikeValue(BaseEventValue):
     like: bool = Field(default=False)
 
 
-class LikeFilmEvent(BaseEventModel):
-    value: LikeFilmValue
+class LikeEvent(BaseEventModel):
+    value: LikeValue
