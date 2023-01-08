@@ -5,9 +5,11 @@ services:
     image: zookeeper:3.5
     container_name: zookeeper
     hostname: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
 
   clickhouse-node1:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:21.7.4
     container_name: clickhouse-node1
     hostname: clickhouse-node1
     ports:
@@ -19,7 +21,7 @@ services:
       - zookeeper
 
   clickhouse-node2:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:21.7.4
     container_name: clickhouse-node2
     hostname: clickhouse-node2
     volumes:
@@ -28,7 +30,7 @@ services:
       - zookeeper
 
   clickhouse-node3:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:21.7.4
     container_name: clickhouse-node3
     hostname: clickhouse-node3
     volumes:
@@ -37,7 +39,7 @@ services:
       - zookeeper
 
   clickhouse-node4:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:21.7.4
     container_name: clickhouse-node4
     hostname: clickhouse-node4
     volumes:
@@ -45,12 +47,25 @@ services:
     depends_on:
       - zookeeper
 
+  kafka:
+    image: confluentinc/cp-kafka:7.1.2
+    container_name: broker
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
   create_ch:
     build: ./.
     container_name: create_ch
     depends_on:
-      - zookeeper
       - clickhouse-node1
-      - clickhouse-node2
-      - clickhouse-node3
-      - clickhouse-node4
