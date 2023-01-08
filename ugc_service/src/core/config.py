@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     token_algo: str
 
     fastapi: FastapiSettings
+    kafka: KafkaSettings
     clickhouse: ClickHouseSettings
 
     class Config:
