@@ -1,9 +1,10 @@
-from http import HTTPStatus
-from typing import List, Optional
+from fastapi import APIRouter, Depends, Request
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
-
-from models.events import CommentFilm, LikeFilm, RatingFilm, ViewPointFilm
+from models.comment import CommentEvent
+from models.film_watch import FilmWatchEvent
+from models.like import LikeEvent
+from models.rating import RatingEvent
+from services.base import EventService, get_event_service
 
 router = APIRouter()
 
@@ -14,21 +15,23 @@ router = APIRouter()
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
-async def viewpoint_film(film_id: str, event: ViewPointFilm, request: Request) -> str:
+async def viewpoint_film(
+    event: FilmWatchEvent,
+    film_id,
+    request: Request,
+    service: EventService = Depends(get_event_service),
+) -> str:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
         event: Данные о событии.
         request: Значения запроса.
+        service: Сервис для работы с Кафка.
     Returns:
         Статус выполнения.
     """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-    print('\n\n\n', id)
-
+    key = await event.get_key(request, film_id)
+    service.produce(key=key, topic_name="views", model=event)
     return "status"
 
 
@@ -38,20 +41,23 @@ async def viewpoint_film(film_id: str, event: ViewPointFilm, request: Request) -
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
-async def like_film(film_id: str, event: LikeFilm, request: Request) -> str:
+async def like_film(
+    event: LikeEvent,
+    film_id,
+    request: Request,
+    service: EventService = Depends(get_event_service),
+) -> str:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
         event: Данные о событии.
         request: Значения запроса.
+        service: Сервис для работы с Кафка.
     Returns:
         Статус выполнения.
     """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
+    key = await event.get_key(request, film_id)
+    service.produce(key=key, topic_name="like", model=event)
     return "status"
 
 
@@ -61,20 +67,23 @@ async def like_film(film_id: str, event: LikeFilm, request: Request) -> str:
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
-async def comment_film(film_id: str, event: CommentFilm, request: Request) -> str:
+async def comment_film(
+    event: CommentEvent,
+    film_id,
+    request: Request,
+    service: EventService = Depends(get_event_service),
+) -> str:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
         event: Данные о событии.
         request: Значения запроса.
+        service: Сервис для работы с Кафка.
     Returns:
         Статус выполнения.
     """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
+    key = await event.get_key(request, film_id)
+    service.produce(key=key, topic_name="comment", model=event)
     return "status"
 
 
@@ -84,18 +93,21 @@ async def comment_film(film_id: str, event: CommentFilm, request: Request) -> st
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
-async def rating_film(film_id: str, event: RatingFilm, request: Request) -> str:
+async def rating_film(
+    event: RatingEvent,
+    film_id,
+    request: Request,
+    service: EventService = Depends(get_event_service),
+) -> str:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
         event: Данные о событии.
         request: Значения запроса.
+        service: Сервис для работы с Кафка.
     Returns:
         Статус выполнения.
     """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
+    key = await event.get_key(request, film_id)
+    service.produce(key=key, topic_name="rating", model=event)
     return "status"
