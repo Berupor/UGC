@@ -19,7 +19,7 @@ def ch_kafka_queue(client: Client):
             )
         ENGINE = Kafka
         SETTINGS
-        kafka_broker_list = 'kafka:9092',
+        kafka_broker_list = 'kafka:9192',
         kafka_topic_list = 'entry-events',
         kafka_group_name = 'group_events',
         kafka_format = 'JSONEachRow'
@@ -43,7 +43,7 @@ def ch_kafa_consumer(client: Client):
     client.execute(
         """
         CREATE MATERIALIZED VIEW materialized_view TO entry_events
-        AS SELECT *
+        AS SELECT timestamp AS timestamp, event AS event
         FROM entry_events_queue
         ORDER BY timestamp
         """)
