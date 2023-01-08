@@ -2,11 +2,15 @@ version: '3.5'
 
 services:
   zookeeper:
-    image: zookeeper:3.5
+    image: confluentinc/cp-zookeeper:7.1.2
     container_name: zookeeper
     hostname: zookeeper
+    ports:
+      - "2181:2181"
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: yes
 
   clickhouse-node1:
     image: yandex/clickhouse-server:21.7.4
@@ -56,13 +60,15 @@ services:
     depends_on:
       - zookeeper
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_INTERNAL://broker:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENERS=OUTSIDE://:9092,INSIDE://:9192
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=OUTSIDE:PLAINTEXT,INSIDE:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=OUTSIDE://localhost:9092,INSIDE://kafka:9192
+      - KAFKA_INTER_BROKER_LISTENER_NAME=OUTSIDE
 
   create_ch:
     build: ./.

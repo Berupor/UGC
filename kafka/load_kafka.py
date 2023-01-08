@@ -22,7 +22,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=
 
 
 def kafka_load(producer: KafkaProducer):
-    for i in range(10):
+    for i in range(1000):
         data = {
             'timestamp': fake.date(),
             'event': str(fake.random_int(min=20000, max=100000))
@@ -33,8 +33,4 @@ def kafka_load(producer: KafkaProducer):
 
 
 if __name__ == '__main__':
-    log_level = logging.DEBUG
-    logging.basicConfig(level=log_level)
-    log = logging.getLogger('kafka')
-    log.setLevel(log_level)
     kafka_load(producer)
