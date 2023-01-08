@@ -10,21 +10,43 @@ router = APIRouter()
 class Event(BaseModel):
     """Валидатор данных о просмотре фильма."""
 
-    event_name: str = Field(default="Название события")
-    event_value: str = Field(default="Значение события")
+    # event_name: str = Field(default="Название события")
+    # event_value: str = Field(default="Значение события")
+
+    async def get_user_id(self, request: Request):
+        if not hasattr(request.state, "id_user"):
+            return None
+        return request.state.id_user
+
+    async def get_id(self, user_id: str, film_id: str) -> str:
+        return user_id + "-" + film_id
 
 
-async def get_id(user_id, film_id):
-    return user_id + "-" + film_id
+class ViewPointFilm(Event):
+    viewpoint: int = Field(default=101, ge=100)
+
+
+class LikeFilm(Event):
+    like: bool = Field(default=False)
+
+
+class CommentFilm(Event):
+    comment: str = Field(default="comment")
+
+
+class RatingFilm(Event):
+    like: float = Field(default=10, ge=0, lt=10)
+
+
 
 
 @router.post(
-    "/{film_id}/events",
+    "/{film_id}/viewpoint",
     summary="Получение отметки о просмотре фильма",
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
-async def film_events(film_id: str, event: Event, request: Request) -> str:
+async def viewpoint_film(film_id: str, event: ViewPointFilm, request: Request) -> str:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
@@ -33,8 +55,78 @@ async def film_events(film_id: str, event: Event, request: Request) -> str:
     Returns:
         Статус выполнения.
     """
-    if not hasattr(request.state, "id_user"):
+    id_user = await event.get_user_id(request)
+    if not id_user:
         return "User not found"
-    id = await get_id(request.state.id_user, film_id)
+    id = await event.get_id(id_user, film_id)
+
+    return "status"
+
+
+@router.post(
+    "/{film_id}/like",
+    summary="Получение отметки о просмотре фильма",
+    description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
+    response_description="Статус обработки данных",
+)
+async def like_film(film_id: str, event: LikeFilm, request: Request) -> str:
+    """Обработка полученных данных о событии.
+    Args:
+        film_id: Id текущего фильма.
+        event: Данные о событии.
+        request: Значения запроса.
+    Returns:
+        Статус выполнения.
+    """
+    id_user = await event.get_user_id(request)
+    if not id_user:
+        return "User not found"
+    id = await event.get_id(id_user, film_id)
+
+    return "status"
+
+
+@router.post(
+    "/{film_id}/comment",
+    summary="Получение отметки о просмотре фильма",
+    description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
+    response_description="Статус обработки данных",
+)
+async def comment_film(film_id: str, event: CommentFilm, request: Request) -> str:
+    """Обработка полученных данных о событии.
+    Args:
+        film_id: Id текущего фильма.
+        event: Данные о событии.
+        request: Значения запроса.
+    Returns:
+        Статус выполнения.
+    """
+    id_user = await event.get_user_id(request)
+    if not id_user:
+        return "User not found"
+    id = await event.get_id(id_user, film_id)
+
+    return "status"
+
+
+@router.post(
+    "/{film_id}/rating",
+    summary="Получение отметки о просмотре фильма",
+    description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
+    response_description="Статус обработки данных",
+)
+async def rating_film(film_id: str, event: RatingFilm, request: Request) -> str:
+    """Обработка полученных данных о событии.
+    Args:
+        film_id: Id текущего фильма.
+        event: Данные о событии.
+        request: Значения запроса.
+    Returns:
+        Статус выполнения.
+    """
+    id_user = await event.get_user_id(request)
+    if not id_user:
+        return "User not found"
+    id = await event.get_id(id_user, film_id)
 
     return "status"
