@@ -15,7 +15,17 @@ class ClickHouseSettings(BaseSettings):
     port: int
 
 
+class FastapiSettings(BaseSettings):
+    project_name: str
+    secret_key: str
+    host: str
+    port: str
+
+
 class Settings(BaseSettings):
+    token_algo: str
+
+    fastapi: FastapiSettings
     clickhouse: ClickHouseSettings
 
     class Config:
