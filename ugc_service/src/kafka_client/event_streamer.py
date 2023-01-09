@@ -2,6 +2,8 @@ import json
 
 from kafka import KafkaConsumer, KafkaProducer
 
+from core.config import settings
+
 
 class KafkaClient:
     """
@@ -17,18 +19,27 @@ class KafkaClient:
         print(message.value)
     """
 
-    def __init__(self, broker_url, topic):
+    def __init__(self, broker_url):
         self.broker_url = broker_url
-        self.topic = topic
 
-    def produce_message(self, message):
+    def produce_message(self, message, topic, key, timestamp_ms=None):
         producer = KafkaProducer(
             bootstrap_servers=self.broker_url,
             value_serializer=lambda v: json.dumps(v).encode("utf-8"),
         )
-        producer.send(self.topic, message)
+        producer.send(topic, message, key)
 
-    def consume_messages(self):
-        consumer = KafkaConsumer(self.topic, bootstrap_servers=self.broker_url)
+    def consume_messages(self, topic):
+        consumer = KafkaConsumer(topic, bootstrap_servers=self.broker_url)
         for message in consumer:
             yield message
+
+
+kafka: KafkaClient = KafkaClient(
+    broker_url=f"{settings.kafka.host}:{settings.kafka.port}"
+)
+
+
+def get_kafka() -> KafkaClient:
+    """Function required for dependency injection"""
+    return kafka
