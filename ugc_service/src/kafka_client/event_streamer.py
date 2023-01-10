@@ -1,6 +1,8 @@
 import json
 
 from kafka import KafkaConsumer, KafkaProducer
+import asyncio
+from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from core.config import settings
 
@@ -8,35 +10,69 @@ from core.config import settings
 class KafkaClient:
     """
     Kafka client for working with messages.
-
-    Using example:
-    client = KafkaClient("localhost:9092", "topic_name")
-    client.produce_message(b"Your message")
-    Or json format
-    client.produce_message('fizzbuzz', {'foo': 'bar'})
-
-    for message in client.consume_messages():
-        print(message.value)
     """
 
-    def __init__(self, broker_url):
-        self.broker_url = broker_url
+    def __init__(self, bootstrap_servers):
+        self.bootstrap_servers = bootstrap_servers
+        self.consumer = None
+        self.producer = None
 
-    def produce_message(self, message, topic, key, timestamp_ms=None):
-        producer = KafkaProducer(
-            bootstrap_servers=self.broker_url,
-            value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+    async def start_consumer(self, topic, group_id=None, value_serializer=lambda x: x):
+        if self.consumer:
+            raise Exception("Consumer already started.")
+
+        self.consumer = AIOKafkaConsumer(
+            topic,
+            loop=asyncio.get_event_loop(),
+            bootstrap_servers=self.bootstrap_servers,
+            group_id=group_id,
+            value_deserializer=value_serializer,
         )
-        producer.send(topic, message, key)
 
-    def consume_messages(self, topic):
-        consumer = KafkaConsumer(topic, bootstrap_servers=self.broker_url)
-        for message in consumer:
-            yield message
+        await self.consumer.start()
+
+    async def stop_consumer(self):
+        if self.consumer is None:
+            raise Exception("Consumer is not started.")
+
+        await self.consumer.stop()
+        self.consumer = None
+
+    async def start_producer(
+            self, value_serializer=lambda v: json.dumps(v).encode("utf-8")
+    ):
+        self.producer = AIOKafkaProducer(
+            loop=asyncio.get_event_loop(),
+            bootstrap_servers=self.bootstrap_servers,
+            value_serializer=value_serializer,
+        )
+        await self.producer.start()
+
+    async def stop_producer(self):
+        if self.producer is None:
+            raise Exception("Producer is not started.")
+
+        await self.producer.stop()
+        self.producer = None
+
+    async def produce_message(self, topic, message, key, timestamp_ms=None):
+        if self.producer:
+            await self.producer.send_and_wait(
+                topic=topic, message=message, key=key, timestamp_ms=timestamp_ms
+            )
+
+        raise Exception("Producer is not started.")
+
+    async def consume_messages(self, topic):
+        if self.consumer:
+            async for msg in self.consumer:
+                yield msg
+
+        raise Exception("Consumer is not started.")
 
 
 kafka: KafkaClient = KafkaClient(
-    broker_url=f"{settings.kafka.host}:{settings.kafka.port}"
+    bootstrap_servers=f"{settings.kafka.host}:{settings.kafka.port}"
 )
 
 
