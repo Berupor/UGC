@@ -17,17 +17,17 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x:
-                         dumps(x).encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
 
 
 def kafka_load(producer: KafkaProducer):
     for i in range(1000):
         data = {
-            'timestamp': fake.date(),
-            'event': str(fake.random_int(min=20000, max=100000))
+            "timestamp": fake.date(),
+            "event": str(fake.random_int(min=20000, max=100000))
         }
-        producer.send(topic='entry-events', value=data)
+        m = json.dumps(data)
+        producer.send(topic='entry-events', value=m.encode('utf-8'))
         print(data)
         time.sleep(1)
 
