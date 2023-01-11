@@ -24,7 +24,7 @@ def kafka_load(producer: KafkaProducer):
     for i in range(1000):
         data = {
             "timestamp": fake.date(),
-            "event": str(fake.random_int(min=20000, max=100000))
+            "event": "test_data"
         }
         m = json.dumps(data)
         producer.send(topic='entry-events', value=m.encode('utf-8'))
