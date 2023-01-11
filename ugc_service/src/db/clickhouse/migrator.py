@@ -19,7 +19,7 @@ def ch_kafka_queue(client: Client):
             )
         ENGINE = Kafka
         SETTINGS
-        kafka_broker_list = 'kafka:9192',
+        kafka_broker_list = 'kafka_dev:9192',
         kafka_topic_list = 'entry-events',
         kafka_group_name = 'group_events',
         kafka_format = 'JSONEachRow'
@@ -51,8 +51,8 @@ def ch_kafa_consumer(client: Client):
 
 if __name__ == '__main__':
     ch_kafka_queue(client)
-    logging.info('created clickhouse kafka queue table')
+    logging.info('created clickhouse kafka_dev queue table')
     ch_table(client)
     logging.info('created clickhouse table: entry_events')
     ch_kafa_consumer(client)
-    logging.info('created clickhouse kafka consumer table')
+    logging.info('created clickhouse kafka_dev consumer table')

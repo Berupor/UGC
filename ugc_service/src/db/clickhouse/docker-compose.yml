@@ -54,7 +54,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.1.2
     container_name: broker
-    hostname: kafka
+    hostname: kafka_dev
     ports:
       - "9092:9092"
     depends_on:
@@ -63,11 +63,11 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
-      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ADVERTISED_HOST_NAME=kafka_dev
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_LISTENERS=OUTSIDE://:9092,INSIDE://:9192
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=OUTSIDE:PLAINTEXT,INSIDE:PLAINTEXT
-      - KAFKA_ADVERTISED_LISTENERS=OUTSIDE://localhost:9092,INSIDE://kafka:9192
+      - KAFKA_ADVERTISED_LISTENERS=OUTSIDE://localhost:9092,INSIDE://kafka_dev:9192
       - KAFKA_INTER_BROKER_LISTENER_NAME=OUTSIDE
 
   create_ch:
