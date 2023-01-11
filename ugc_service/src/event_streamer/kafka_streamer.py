@@ -1,7 +1,6 @@
+import asyncio
 import json
 
-from kafka import KafkaConsumer, KafkaProducer
-import asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from core.config import settings
@@ -12,12 +11,18 @@ class KafkaClient:
     Kafka client for working with messages.
     """
 
+    DEFAULT_CONS_SERIALIZER = lambda x: x
+    JSON_PRODUCER_SERIALIZER = lambda v: json.dumps(v).encode("utf-8")
+    DEFAULT_PRODUCER_SERIALIZER = lambda v: json.dumps(v).encode("utf-8")
+
     def __init__(self, bootstrap_servers):
         self.bootstrap_servers = bootstrap_servers
         self.consumer = None
         self.producer = None
 
-    async def start_consumer(self, topic, group_id=None, value_serializer=lambda x: x):
+    async def _start_consumer(
+        self, topic, group_id, value_serializer=DEFAULT_CONS_SERIALIZER
+    ):
         if self.consumer:
             raise Exception("Consumer already started.")
 
@@ -38,9 +43,10 @@ class KafkaClient:
         await self.consumer.stop()
         self.consumer = None
 
-    async def start_producer(
-            self, value_serializer=lambda v: json.dumps(v).encode("utf-8")
-    ):
+    async def _start_producer(self, value_serializer=JSON_PRODUCER_SERIALIZER):
+        if self.producer:
+            raise Exception("Producer already started.")
+
         self.producer = AIOKafkaProducer(
             loop=asyncio.get_event_loop(),
             bootstrap_servers=self.bootstrap_servers,
@@ -55,27 +61,39 @@ class KafkaClient:
         await self.producer.stop()
         self.producer = None
 
-    async def produce_message(self, topic, message, key, timestamp_ms=None):
-        if self.producer:
-            await self.producer.send_and_wait(
-                topic=topic, message=message, key=key, timestamp_ms=timestamp_ms
-            )
+    async def produce_message(
+        self,
+        topic,
+        value=None,
+        key=None,
+        partition=None,
+        timestamp_ms=None,
+        headers=None,
+    ):
+        if not self.producer:
+            await self._start_producer()
 
-        raise Exception("Producer is not started.")
+        await self.producer.send_and_wait(
+            topic, value, key, partition, timestamp_ms, headers
+        )
 
-    async def consume_messages(self, topic):
-        if self.consumer:
-            async for msg in self.consumer:
-                yield msg
+    async def consume_messages(
+        self,
+        topic,
+        group_id=None,
+    ):
+        if not self.consumer:
+            await self._start_consumer(topic, group_id)
 
-        raise Exception("Consumer is not started.")
+        async for msg in self.consumer:
+            yield msg
 
 
-kafka: KafkaClient = KafkaClient(
+kafka_client: KafkaClient = KafkaClient(
     bootstrap_servers=f"{settings.kafka.host}:{settings.kafka.port}"
 )
 
 
 def get_kafka() -> KafkaClient:
     """Function required for dependency injection"""
-    return kafka
+    return kafka_client

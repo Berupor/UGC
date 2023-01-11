@@ -3,10 +3,12 @@ from http import HTTPStatus
 
 import jwt
 import uvicorn
-from api.v1 import events
-from core.config import settings
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import ORJSONResponse
+
+from api.v1 import events
+from core.config import settings
+from event_streamer.kafka_streamer import kafka_client
 
 app = FastAPI(
     title="API для получения и обработки данных пользовательского поведения",
@@ -42,6 +44,9 @@ async def startup():
 
 @app.on_event("shutdown")
 async def shutdown():
+    await kafka_client.stop_producer()
+    await kafka_client.stop_consumer()
+
     logging.info("closed redis connection.")
 
 
