@@ -31,7 +31,7 @@ async def viewpoint_film(
         Статус выполнения.
     """
     key = await event.get_key(request, film_id)
-    service.produce(key=key, topic_name="views", model=event)
+    await service.produce(key=key, topic_name="views", model=event)
     return "status"
 
 
@@ -57,7 +57,7 @@ async def like_film(
         Статус выполнения.
     """
     key = await event.get_key(request, film_id)
-    service.produce(key=key, topic_name="like", model=event)
+    await service.produce(key=key, topic_name="like", model=event)
     return "status"
 
 
@@ -74,16 +74,16 @@ async def comment_film(
     service: EventService = Depends(get_event_service),
 ) -> str:
     """Обработка полученных данных о событии.
-    Args:
-        film_id: Id текущего фильма.
-        event: Данные о событии.
-        request: Значения запроса.
-        service: Сервис для работы с Кафка.
-    Returns:
-        Статус выполнения.
-    """
+        Args:
+            film_id: Id текущего фильма.
+            event: Данные о событии.
+            request: Значения запроса.
+            service: Сервис для работы с Кафка.
+        Returns:
+            Статус выполнения.
+    #"""
     key = await event.get_key(request, film_id)
-    service.produce(key=key, topic_name="comment", model=event)
+    await service.produce(key=key, topic_name="comment", model=event)
     return "status"
 
 
@@ -109,5 +109,5 @@ async def rating_film(
         Статус выполнения.
     """
     key = await event.get_key(request, film_id)
-    service.produce(key=key, topic_name="rating", model=event)
+    await service.produce(key=key, topic_name="rating", model=event)
     return "status"
