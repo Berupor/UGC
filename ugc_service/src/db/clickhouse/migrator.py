@@ -7,8 +7,6 @@ from migrator_settings import kafka_engine_settings
 logging.basicConfig(level=logging.INFO)
 
 client = Client(host='clickhouse-node1')
-#client = Client(host='localhost')
-
 
 
 def ch_kafka_queue(client: Client):
@@ -16,8 +14,10 @@ def ch_kafka_queue(client: Client):
         f"""
         CREATE TABLE entry_events_queue
             (
-                timestamp DateTime,
-                event String
+                id UUID,
+                value String,
+                name String,
+                timestamp DateTime
             )
         ENGINE = Kafka
         SETTINGS
@@ -33,8 +33,10 @@ def ch_table(client: Client):
         """
         CREATE TABLE entry_events
             (
-                timestamp DateTime,
-                event String
+                id UUID,
+                value String,
+                name String,
+                timestamp DateTime
             )
         ENGINE = MergeTree
         ORDER BY timestamp
