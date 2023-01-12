@@ -32,8 +32,7 @@ async def viewpoint_film(
     Returns:
         Статус выполнения.
     """
-    key = "key"
-    # key = await event.get_key(request, film_id)
+    key = await event.get_key(request, film_id)
     await service.produce(key=key, topic_name="views", model=event)
     return "status"
 
