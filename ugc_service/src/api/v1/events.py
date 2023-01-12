@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request
 
+from api.v1.decorators import exception_handler
 from models.comment import CommentEvent
 from models.film_watch import FilmWatchEvent
 from models.like import LikeEvent
@@ -15,6 +16,7 @@ router = APIRouter()
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
+@exception_handler
 async def viewpoint_film(
     event: FilmWatchEvent,
     film_id,
