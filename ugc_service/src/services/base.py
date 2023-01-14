@@ -11,7 +11,7 @@ class EventService:
         await self.kafka_client.produce_message(
             key=str.encode(key),
             topic=topic_name,
-            value=(model.value.json()),
+            value=({"id": key, "timestamp_ms": model.timestamp_ms, "value": model.value.json()}),
             timestamp_ms=model.timestamp_ms,
         )
 

@@ -12,44 +12,43 @@ client = Client(host='clickhouse-node1')
 def ch_kafka_queue(client: Client):
     client.execute(
         f"""
-        CREATE TABLE entry_events_queue
+        CREATE TABLE IF NOT EXISTS entry_events_queue
             (
-                id UUID,
-                value String,
-                name String,
-                timestamp DateTime
+                message String
             )
         ENGINE = Kafka
         SETTINGS
         kafka_broker_list = '{kafka_engine_settings.host}:{kafka_engine_settings.port}',
         kafka_topic_list = '{kafka_engine_settings.topic}',
         kafka_group_name = 'group_events',
-        kafka_format = 'JSONEachRow'
+        kafka_format = 'JSONAsString',
+        kafka_row_delimiter = '\n'
         """)
 
 
 def ch_table(client: Client):
     client.execute(
         """
-        CREATE TABLE entry_events
+        CREATE TABLE IF NOT EXISTS entry_events
             (
-                id UUID,
-                value String,
-                name String,
-                timestamp DateTime
+                timestamp_ms DateTime,
+                id String,
+                value String
             )
         ENGINE = MergeTree
-        ORDER BY timestamp
+        ORDER BY timestamp_ms
         """)
 
 
 def ch_kafa_consumer(client: Client):
     client.execute(
         """
-        CREATE MATERIALIZED VIEW materialized_view TO entry_events
-        AS SELECT *
+        CREATE MATERIALIZED VIEW IF NOT EXISTS materialized_view TO entry_events
+        AS SELECT 
+            toDateTime(JSONExtractUInt(message, 'timestamp_ms')) AS timestamp_ms,
+            JSONExtractString(message, 'id') AS id,
+            JSONExtractString(message, 'value') AS value
         FROM entry_events_queue
-        ORDER BY timestamp
         """)
 
 

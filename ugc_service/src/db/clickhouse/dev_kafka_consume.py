@@ -2,7 +2,7 @@ from kafka import KafkaConsumer
 
 
 consumer = KafkaConsumer(
-    'entry-events',
+    'views',
     bootstrap_servers=['localhost:9092'],
     auto_offset_reset='earliest',
     group_id='echo_listener',
