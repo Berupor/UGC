@@ -6,7 +6,7 @@
 **/.pytest_cache
 **/.idea
 
-.env
+.env.prod
 .env.prod
 .env.dev
 

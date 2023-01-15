@@ -2,7 +2,6 @@ import logging
 
 from clickhouse_driver import Client
 
-from src.core.config import settings
 logging.basicConfig(level=logging.INFO)
 
 client = Client(host='clickhouse-node1')
