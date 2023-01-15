@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 from clickhouse_driver import Client
 
@@ -54,6 +55,7 @@ def ch_kafa_consumer(client: Client):
 
 
 def init_ch():
+    sleep(10)
     ch_kafka_queue(client)
     logging.info("created clickhouse kafka_dev queue table")
     ch_table(client)
