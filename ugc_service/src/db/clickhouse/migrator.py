@@ -2,8 +2,6 @@ import logging
 
 from clickhouse_driver import Client
 
-from migrator_settings import kafka_engine_settings
-
 logging.basicConfig(level=logging.INFO)
 
 client = Client(host='clickhouse-node1')
@@ -12,31 +10,33 @@ client = Client(host='clickhouse-node1')
 def ch_kafka_queue(client: Client):
     client.execute(
         f"""
-        CREATE TABLE IF NOT EXISTS entry_events_queue
-            (
-                message String
-            )
-        ENGINE = Kafka
-        SETTINGS
-        kafka_broker_list = '{kafka_engine_settings.host}:{kafka_engine_settings.port}',
-        kafka_topic_list = '{kafka_engine_settings.topic}',
-        kafka_group_name = 'group_events',
-        kafka_format = 'JSONAsString',
-        kafka_row_delimiter = '\n'
+            CREATE TABLE IF NOT EXISTS entry_events_queue
+                (
+                    id String,
+                    viewpoint UInt64,
+                    datetime_event Datetime
+                )
+            ENGINE = Kafka
+            SETTINGS
+            kafka_broker_list = 'broker:9192',
+            kafka_topic_list = 'views',
+            kafka_group_name = 'group_events',
+            kafka_format = 'JSONEachRow',
+            kafka_row_delimiter = '\n';
         """)
 
 
 def ch_table(client: Client):
     client.execute(
         """
-        CREATE TABLE IF NOT EXISTS entry_events
-            (
-                timestamp_ms DateTime,
-                id String,
-                value String
-            )
-        ENGINE = MergeTree
-        ORDER BY timestamp_ms
+            CREATE TABLE  IF NOT EXISTS  entry_events
+                    (
+                        id String,
+                        viewpoint UInt64,
+                        datetime_event Datetime
+                    )
+                ENGINE = MergeTree PARTITION BY toYYYYMMDD(datetime_event)
+                ORDER BY id;
         """)
 
 
@@ -44,11 +44,9 @@ def ch_kafa_consumer(client: Client):
     client.execute(
         """
         CREATE MATERIALIZED VIEW IF NOT EXISTS materialized_view TO entry_events
-        AS SELECT 
-            toDateTime(JSONExtractUInt(message, 'timestamp_ms')) AS timestamp_ms,
-            JSONExtractString(message, 'id') AS id,
-            JSONExtractString(message, 'value') AS value
+        AS SELECT *
         FROM entry_events_queue
+        ORDER BY id;
         """)
 
 

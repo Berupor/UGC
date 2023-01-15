@@ -1,4 +1,5 @@
 from uuid import UUID
+from datetime import datetime
 
 import orjson
 from fastapi import Request
@@ -11,7 +12,7 @@ def orjson_dumps(v, *, default):
 
 
 class BaseEventModel(BaseModel):
-    timestamp_ms: int = Field(default=0, ge=-2177452799, le=4102444801)
+    datetime_event: str = Field(default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     async def get_key(self, request: Request, film_id: UUID) -> str:
         return request.state.id_user + "-" + film_id

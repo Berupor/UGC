@@ -25,6 +25,7 @@ class FastapiSettings(BaseSettings):
 class KafkaSettings(BaseSettings):
     host: str
     port: int
+    topic: str
 
 
 class Settings(BaseSettings):

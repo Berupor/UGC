@@ -1,3 +1,6 @@
+from http import HTTPStatus
+from typing import Tuple
+
 from fastapi import APIRouter, Depends, Request
 
 from api.v1.decorators import exception_handler
@@ -22,7 +25,7 @@ async def viewpoint_film(
     film_id,
     request: Request,
     service: EventService = Depends(get_event_service),
-) -> str:
+) -> tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
@@ -34,7 +37,7 @@ async def viewpoint_film(
     """
     key = await event.get_key(request, film_id)
     await service.produce(key=key, topic_name="views", model=event)
-    return "status"
+    return HTTPStatus.OK.phrase, 200
 
 
 @router.post(
@@ -48,7 +51,7 @@ async def like_film(
     film_id,
     request: Request,
     service: EventService = Depends(get_event_service),
-) -> str:
+) -> tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
@@ -60,7 +63,7 @@ async def like_film(
     """
     key = await event.get_key(request, film_id)
     await service.produce(key=key, topic_name="like", model=event)
-    return "status"
+    return HTTPStatus.OK.phrase, 200
 
 
 @router.post(
@@ -74,7 +77,7 @@ async def comment_film(
     film_id,
     request: Request,
     service: EventService = Depends(get_event_service),
-) -> str:
+) -> tuple[str, int]:
     """Обработка полученных данных о событии.
         Args:
             film_id: Id текущего фильма.
@@ -86,7 +89,7 @@ async def comment_film(
     #"""
     key = await event.get_key(request, film_id)
     await service.produce(key=key, topic_name="comment", model=event)
-    return "status"
+    return HTTPStatus.OK.phrase, 200
 
 
 @router.post(
@@ -100,7 +103,7 @@ async def rating_film(
     film_id,
     request: Request,
     service: EventService = Depends(get_event_service),
-) -> str:
+) -> tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
@@ -112,4 +115,4 @@ async def rating_film(
     """
     key = await event.get_key(request, film_id)
     await service.produce(key=key, topic_name="rating", model=event)
-    return "status"
+    return HTTPStatus.OK.phrase, 200

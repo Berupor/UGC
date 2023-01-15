@@ -24,10 +24,10 @@ def kafka_load(producer: KafkaProducer):
     for i in range(1000):
         data = {
             "timestamp": fake.date(),
-            "event": "test_data"
+            "event": "saturday"
         }
         m = json.dumps(data)
-        producer.send(topic='entry-events', value=m.encode('utf-8'))
+        producer.send(topic='views', value=m.encode('utf-8'))
         print(data)
         time.sleep(1)
 

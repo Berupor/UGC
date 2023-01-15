@@ -1,4 +1,5 @@
 from fastapi import Depends
+from json import loads
 
 from event_streamer.kafka_streamer import KafkaClient, get_kafka
 
@@ -8,11 +9,12 @@ class EventService:
         self.kafka_client = kafka
 
     async def produce(self, key, topic_name, model) -> None:
+        data = loads(model.json())
+        data["id"] = key
         await self.kafka_client.produce_message(
             key=str.encode(key),
             topic=topic_name,
-            value=({"id": key, "timestamp_ms": model.timestamp_ms, "value": model.value.json()}),
-            timestamp_ms=model.timestamp_ms,
+            value=data
         )
 
     async def consume(self, topic, group_id=None):
