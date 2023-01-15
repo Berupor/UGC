@@ -14,5 +14,4 @@ ENV PYTHONPATH "${PYTHONPATH}:/src/"
 
 EXPOSE 8000
 
-CMD ["python", "./src/db/clickhouse/migrator.py"]
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,5 +1,6 @@
-from models.base import BaseEventModel
 from pydantic import Field
+
+from models.base import BaseEventModel
 
 
 class FilmWatchEvent(BaseEventModel):

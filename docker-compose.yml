@@ -120,11 +120,6 @@ services:
     depends_on:
       - zookeeper
 
-  create_ch:
-    build:
-      ugc_service/src/db/clickhouse
-    networks:
-      - create_ch
 
 networks:
   nginx:
@@ -138,6 +133,4 @@ networks:
   broker:
     name: ugc_net
   clickhouse:
-    name: ugc_net
-  create_ch:
     name: ugc_net

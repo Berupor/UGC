@@ -1,7 +1,8 @@
 from json import loads
 
-from event_streamer.kafka_streamer import KafkaClient, get_kafka
 from fastapi import Depends
+
+from event_streamer.kafka_streamer import KafkaClient, get_kafka
 
 
 class EventService:
