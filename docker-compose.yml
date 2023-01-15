@@ -1,0 +1,95 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.1.2
+    container_name: zookeeper
+    hostname: zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: yes
+#
+#  fastapi:
+#    build: ugc_service
+#    restart: always
+#    expose:
+#      - "8000"
+#    ports:
+#      - "8000:8000"
+#    env_file:
+#      - ./.env.prod
+#      
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    ports:
+      - "9008:9000"
+    depends_on:
+      - broker
+    environment:
+      - KAFKA_BROKERCONNECT=broker:9192
+  broker:
+    image: confluentinc/cp-kafka:7.1.2
+    container_name: broker
+    hostname: broker
+    restart: always
+    ports:
+      - "9092:9092"
+      - "9192:9192"
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_ADVERTISED_HOST_NAME=broker
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENERS=OUTSIDE://:9092,INSIDE://:9192
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=OUTSIDE:PLAINTEXT,INSIDE:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=OUTSIDE://localhost:9092,INSIDE://broker:9192
+      - KAFKA_INTER_BROKER_LISTENER_NAME=OUTSIDE
+
+  clickhouse-node1:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node1
+    hostname: clickhouse-node1
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse-node2:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node2
+    hostname: clickhouse-node2
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node2:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse-node3:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node3
+    hostname: clickhouse-node3
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node3:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse-node4:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node4
+    hostname: clickhouse-node4
+    volumes:
+      -  ./ugc_service/src/db/clickhouse/data/node4:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+#  create_ch:
+#    build:
+#      ugc_service/src/db/clickhouse

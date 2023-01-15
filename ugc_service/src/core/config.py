@@ -22,10 +22,17 @@ class FastapiSettings(BaseSettings):
     port: str
 
 
+class KafkaSettings(BaseSettings):
+    host: str
+    port: int
+    topic: str
+
+
 class Settings(BaseSettings):
     token_algo: str
 
     fastapi: FastapiSettings
+    kafka: KafkaSettings
     clickhouse: ClickHouseSettings
 
     class Config:
