@@ -17,4 +17,4 @@ https://github.com/Berupor/UGC-Sprint-1
 Документация:
 - `$HOST/api/openapi`
 
-\
+
