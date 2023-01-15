@@ -53,7 +53,7 @@ def ch_kafa_consumer(client: Client):
     )
 
 
-if __name__ == "__main__":
+def init_ch():
     ch_kafka_queue(client)
     logging.info("created clickhouse kafka_dev queue table")
     ch_table(client)
