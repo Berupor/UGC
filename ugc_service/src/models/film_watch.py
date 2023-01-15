@@ -1,4 +1,4 @@
-from models.base import BaseEventModel, BaseEventValue
+from models.base import BaseEventModel
 from pydantic import Field
 
 

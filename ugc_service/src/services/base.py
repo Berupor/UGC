@@ -1,7 +1,7 @@
-from fastapi import Depends
 from json import loads
 
 from event_streamer.kafka_streamer import KafkaClient, get_kafka
+from fastapi import Depends
 
 
 class EventService:
@@ -12,9 +12,7 @@ class EventService:
         data = loads(model.json())
         data["id"] = key
         await self.kafka_client.produce_message(
-            key=str.encode(key),
-            topic=topic_name,
-            value=data
+            key=str.encode(key), topic=topic_name, value=data
         )
 
     async def consume(self, topic, group_id=None):

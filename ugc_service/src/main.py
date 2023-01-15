@@ -1,16 +1,15 @@
 import logging
 
-import uvicorn
-from fastapi import FastAPI, Request
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import ORJSONResponse
 import jwt
-
+import uvicorn
 from api.v1 import events
 from api.v1.decorators import exception_handler
 from core import exceptions
 from core.config import settings
 from event_streamer.kafka_streamer import kafka_client
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import ORJSONResponse
 
 app = FastAPI(
     title="API для получения и обработки данных пользовательского поведения",

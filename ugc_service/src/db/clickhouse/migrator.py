@@ -4,7 +4,7 @@ from clickhouse_driver import Client
 
 logging.basicConfig(level=logging.INFO)
 
-client = Client(host='clickhouse-node1')
+client = Client(host="clickhouse-node1")
 
 
 def ch_kafka_queue(client: Client):
@@ -23,7 +23,8 @@ def ch_kafka_queue(client: Client):
             kafka_group_name = 'group_events',
             kafka_format = 'JSONEachRow',
             kafka_row_delimiter = '\n';
-        """)
+        """
+    )
 
 
 def ch_table(client: Client):
@@ -37,7 +38,8 @@ def ch_table(client: Client):
                     )
                 ENGINE = MergeTree PARTITION BY toYYYYMMDD(datetime_event)
                 ORDER BY id;
-        """)
+        """
+    )
 
 
 def ch_kafa_consumer(client: Client):
@@ -47,13 +49,14 @@ def ch_kafa_consumer(client: Client):
         AS SELECT *
         FROM entry_events_queue
         ORDER BY id;
-        """)
+        """
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ch_kafka_queue(client)
-    logging.info('created clickhouse kafka_dev queue table')
+    logging.info("created clickhouse kafka_dev queue table")
     ch_table(client)
-    logging.info('created clickhouse table: entry_events')
+    logging.info("created clickhouse table: entry_events")
     ch_kafa_consumer(client)
-    logging.info('created clickhouse kafka_dev consumer table')
+    logging.info("created clickhouse kafka_dev consumer table")
