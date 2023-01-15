@@ -1,9 +1,10 @@
 from http import HTTPStatus
-from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, Request
 
-from models.events import CommentFilm, LikeFilm, RatingFilm, ViewPointFilm
+from api.v1.decorators import exception_handler
+from models.film_watch import FilmWatchEvent
+from services.base import EventService, get_event_service
 
 router = APIRouter()
 
@@ -14,87 +15,22 @@ router = APIRouter()
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
-async def viewpoint_film(film_id: str, event: ViewPointFilm, request: Request) -> str:
+@exception_handler
+async def viewpoint_film(
+    event: FilmWatchEvent,
+    film_id,
+    request: Request,
+    service: EventService = Depends(get_event_service),
+) -> tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
         event: Данные о событии.
         request: Значения запроса.
+        service: Сервис для работы с Кафка.
     Returns:
         Статус выполнения.
     """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
-    return "status"
-
-
-@router.post(
-    "/{film_id}/like",
-    summary="Получение отметки о просмотре фильма",
-    description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
-    response_description="Статус обработки данных",
-)
-async def like_film(film_id: str, event: LikeFilm, request: Request) -> str:
-    """Обработка полученных данных о событии.
-    Args:
-        film_id: Id текущего фильма.
-        event: Данные о событии.
-        request: Значения запроса.
-    Returns:
-        Статус выполнения.
-    """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
-    return "status"
-
-
-@router.post(
-    "/{film_id}/comment",
-    summary="Получение отметки о просмотре фильма",
-    description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
-    response_description="Статус обработки данных",
-)
-async def comment_film(film_id: str, event: CommentFilm, request: Request) -> str:
-    """Обработка полученных данных о событии.
-    Args:
-        film_id: Id текущего фильма.
-        event: Данные о событии.
-        request: Значения запроса.
-    Returns:
-        Статус выполнения.
-    """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
-    return "status"
-
-
-@router.post(
-    "/{film_id}/rating",
-    summary="Получение отметки о просмотре фильма",
-    description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
-    response_description="Статус обработки данных",
-)
-async def rating_film(film_id: str, event: RatingFilm, request: Request) -> str:
-    """Обработка полученных данных о событии.
-    Args:
-        film_id: Id текущего фильма.
-        event: Данные о событии.
-        request: Значения запроса.
-    Returns:
-        Статус выполнения.
-    """
-    id_user = await event.get_user_id(request)
-    if not id_user:
-        return "User not found"
-    id = await event.get_id(id_user, film_id)
-
-    return "status"
+    key = await event.get_key(request, film_id)
+    await service.produce(key=key, topic_name="views", model=event)
+    return HTTPStatus.OK.phrase, 200
