@@ -1,7 +1,8 @@
 from http import HTTPStatus
 
-from api.v1.decorators import exception_handler
 from fastapi import APIRouter, Depends, Request
+
+from api.v1.decorators import exception_handler
 from models.film_watch import FilmWatchEvent
 from services.base import EventService, get_event_service
 

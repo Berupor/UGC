@@ -1,5 +1,6 @@
-from models.base import BaseEventModel, BaseEventValue
 from pydantic import Field
+
+from models.base import BaseEventModel, BaseEventValue
 
 
 class LikeValue(BaseEventValue):

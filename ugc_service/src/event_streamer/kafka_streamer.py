@@ -2,6 +2,7 @@ import asyncio
 import json
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
+
 from core.config import settings
 
 
