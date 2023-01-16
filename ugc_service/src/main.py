@@ -40,8 +40,8 @@ async def add_process_time_header(request: Request, call_next):
             request.state.id_user = payload.get("user_id")
             response = await call_next(request)
             return response
-        else:
-            raise exceptions.AuthTokenMissedException
+
+        raise exceptions.AuthTokenMissedException
 
     except jwt.exceptions.InvalidAudienceError:
         raise exceptions.AuthTokenInvalidAudience
