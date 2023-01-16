@@ -29,12 +29,12 @@ def ch_table(client: Client):
 
 
 def row_reader():
-    with open('test.csv') as test_csv:
+    with open(r'data\test.csv') as test_csv:
         for line in csv.reader(test_csv):
             yield line
 
 
-with open('test.csv') as f:
+with open(r'data\test.csv') as f:
     ch_drop(client)
     ch_table(client)
     start_time = datetime.datetime.now()
