@@ -1,8 +1,9 @@
-import datetime
 import random
 import uuid
 from faker import Faker
 import csv
+
+import json
 
 fake = Faker()
 
@@ -18,3 +19,9 @@ with open('test.csv', 'w') as csvfile:
     writer.writerow(['id', 'viewpoint', 'timestamp'])
     for i in range(1, 1000):
         writer.writerow(fake_data())
+
+    results = {"clickhouse_time": "not tested",
+               "vertica_time": "not tested"}
+
+    with open('results.json', 'w') as r:
+        json.dump(results, r)

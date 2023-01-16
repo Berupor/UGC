@@ -1,4 +1,5 @@
 import datetime
+import json
 
 import vertica_python
 import csv
@@ -29,6 +30,13 @@ with vertica_python.connect(**connection_info) as connection:  # 1
         cursor.copy("COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs)
     total_time = datetime.datetime.now() - start_time
     print('done in: ', total_time)
+
+    with open('results.json', 'r') as r:
+        json_results = json.load(r)
+        json_results["vertica_time"] = str(total_time)
+
+    with open('results.json', 'w') as r:
+        json.dump(json_results, r)
 
     #cursor.execute("""
     #    SELECT * FROM test;
