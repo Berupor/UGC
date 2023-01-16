@@ -2,7 +2,7 @@ from clickhouse_driver import Client
 
 
 
-def create_ch_table(client: Client):
+def init_ch(client: Client):
     client.execute(
         """
             CREATE TABLE  IF NOT EXISTS  test
@@ -16,5 +16,5 @@ def create_ch_table(client: Client):
         """
     )
 
-def flush_db(client: Client):
+def flush_ch(client: Client):
     client.execute("""DROP TABLE  IF EXISTS  test;""")
