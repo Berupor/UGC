@@ -1,7 +1,7 @@
 import datetime
 import csv
 
-from faker import Faker
+import json
 
 from clickhouse_driver import Client
 
@@ -41,5 +41,14 @@ with open('test.csv') as f:
     client.execute('INSERT INTO test VALUES', (line for line in row_reader()))
     total_time = datetime.datetime.now() - start_time
     print('done in: ', total_time)
+
+    with open('results.json', 'r') as r:
+        json_results = json.load(r)
+        json_results["clickhouse_time"] = str(total_time)
+
+    with open('results.json', 'w') as r:
+        json.dump(json_results, r)
+
+
 
 print(client.execute('SELECT * FROM test'))
