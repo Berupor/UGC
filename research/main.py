@@ -3,7 +3,7 @@ from db.clickhouse.data_scheme import init_ch
 from db.vertica.data_scheme import init_vertica
 from db.vertica.vertica_client import vt_client
 from speed_test import DBSpeedTest, VerticaSpeedTest
-from test_data.fake_data import data_generator, post_data
+from test_data.fake_data import data_generator
 
 ch_speed_test = DBSpeedTest(ch_client)
 init_ch(ch_client)

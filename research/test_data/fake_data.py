@@ -9,10 +9,3 @@ def data_generator():
         for line in csv.reader(test_csv):
             yield line
 
-
-def post_data():
-    """
-    Return csv data for file writing to db
-    """
-    with open('test_data/test.csv', 'rb') as file:
-        return file
