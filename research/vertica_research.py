@@ -26,7 +26,7 @@ with vertica_python.connect(**connection_info) as connection:  # 1
     );
     """)
     start_time = datetime.datetime.now()
-    with open("test.csv", "rb") as fs:
+    with open("test_data/test.csv", "rb") as fs:
         cursor.copy("COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs)
     total_time = datetime.datetime.now() - start_time
     print('done in: ', total_time)
