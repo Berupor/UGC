@@ -2,7 +2,6 @@ from datetime import datetime
 from uuid import UUID
 
 import orjson
-from fastapi import Request
 from pydantic import BaseModel, Field
 
 
@@ -14,8 +13,8 @@ def orjson_dumps(v, *, default):
 class BaseEventModel(BaseModel):
     datetime_event: str = Field(default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    async def get_key(self, request: Request, film_id: UUID) -> str:
-        return request.state.id_user + "-" + film_id
+    async def get_key(self, user_id: UUID, film_id: UUID) -> str:
+        return f"{user_id}&{film_id}"
 
     class Config:
         # We replace the standard work with json with a faster one
