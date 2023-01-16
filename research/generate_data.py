@@ -14,7 +14,7 @@ def fake_data():
     return [event_id, viewpoint, timestamp]
 
 
-with open('test.csv', 'w') as csvfile:
+with open('test_data/test.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['id', 'viewpoint', 'timestamp'])
     for i in range(1, 1000):
