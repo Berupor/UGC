@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 
 
 class SpeedTest(ABC):
-
     @abstractmethod
     def test_insert_data(self, query, data):
         ...
@@ -14,7 +13,6 @@ class SpeedTest(ABC):
 
 
 class DBSpeedTest(SpeedTest):
-
     def __init__(self, db_connection):
         self.db = db_connection
 
@@ -38,7 +36,9 @@ class VerticaSpeedTest(SpeedTest):
     def test_insert_data(self, query, data):
         start_time = time.time()
         with open("test_data/test.csv", "rb") as fs:
-            self.cursor.copy("COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs)
+            self.cursor.copy(
+                "COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs
+            )
 
         end_time = time.time()
         return end_time - start_time

@@ -1,7 +1,6 @@
 from clickhouse_driver import Client
 
 
-
 def init_ch(client: Client):
     client.execute(
         """
@@ -15,6 +14,7 @@ def init_ch(client: Client):
                 ORDER BY id;
         """
     )
+
 
 def flush_ch(client: Client):
     client.execute("""DROP TABLE  IF EXISTS  test;""")
