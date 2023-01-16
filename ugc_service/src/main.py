@@ -1,6 +1,5 @@
 import logging
 
-import jwt
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -26,29 +25,7 @@ app = FastAPI(
 @app.middleware("http")
 @exception_handler
 async def add_process_time_header(request: Request, call_next):
-    if app.docs_url in request.url.path:
-        response = await call_next(request)
-        return response
-
-    try:
-        if request.cookies.get("access_token_cookie"):
-            payload = jwt.decode(
-                request.cookies.get("access_token_cookie"),
-                settings.fastapi.secret_key,
-                settings.token_algo,
-            )
-            request.state.id_user = payload.get("user_id")
-            response = await call_next(request)
-            return response
-        else:
-            raise exceptions.AuthTokenMissedException
-
-    except jwt.exceptions.InvalidAudienceError:
-        raise exceptions.AuthTokenInvalidAudience
-    except jwt.exceptions.ExpiredSignatureError:
-        raise exceptions.AuthTokenOutdatedException
-    except jwt.exceptions.InvalidSignatureError:
-        raise exceptions.AuthTokenWithWrongSignatureException
+    return await call_next(request)
 
 
 @app.exception_handler(RequestValidationError)

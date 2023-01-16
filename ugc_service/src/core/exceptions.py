@@ -30,3 +30,8 @@ class AuthTokenInvalidAudience(ApiException):
 class AuthTokenWithWrongSignatureException(ApiException):
     message: str = "Token with wrong signature"
     code: str = "A004"
+
+
+class AuthTokenInvalidScheme(ApiException):
+    message: str = "Invalid authentication scheme"
+    code: str = "A005"
