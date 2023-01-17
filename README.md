@@ -1,6 +1,3 @@
-# Проектная работа 8 спринта
-https://github.com/Berupor/UGC-Sprint-1
-
 # Запуск проекта
 
 
