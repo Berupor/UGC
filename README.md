@@ -1,17 +1,15 @@
-# Запуск проекта
+# Launch of the project
 
 
-## Окружение
-1. Создайте файл .env и заполните его значениями из `env.example`
+## Environment
+1. Create an .env file and fill it with values from `env.example`
 
 ## Docker
-2. Запустите Docker `docker-compose up -d --build`
+2. Run Docker `docker-compose up -d --build`
 
 ## API
-Основное API:
+Main API:
 - `$HOST/api/v1`
 
-Документация:
+Documentation:
 - `$HOST/api/openapi`
-
-
