@@ -12,7 +12,7 @@ class SpeedTest(ABC):
         ...
 
 
-class DBSpeedTest(SpeedTest):
+class CHSpeedTest(SpeedTest):
     def __init__(self, db_connection):
         self.db = db_connection
 
@@ -35,7 +35,7 @@ class VerticaSpeedTest(SpeedTest):
 
     def test_insert_data(self, query, data):
         start_time = time.time()
-        with open("test_data/test.csv", "rb") as fs:
+        with open("clickhouse_research/test_data/test.csv", "rb") as fs:
             self.cursor.copy(
                 "COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs
             )

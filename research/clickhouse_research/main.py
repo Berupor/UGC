@@ -2,10 +2,14 @@ from db.clickhouse.clickhouse_client import ch_client
 from db.clickhouse.data_scheme import flush_ch, init_ch
 from db.vertica.data_scheme import flush_vertica, init_vertica
 from db.vertica.vertica_client import vt_client
-from speed_test import DBSpeedTest, VerticaSpeedTest
 from test_data.fake_data import data_generator
+import sys
+import os
 
-ch_speed_test = DBSpeedTest(ch_client)
+sys.path.append("..")
+from research.speed_test import CHSpeedTest, VerticaSpeedTest
+
+ch_speed_test = CHSpeedTest(ch_client)
 flush_ch(ch_client)
 init_ch(ch_client)
 
