@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    env_file:
+      - .env.prod
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: MONGO__USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: MONGO__PASSWORD
+
+volumes:
+  mongo-data:

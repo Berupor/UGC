@@ -2,6 +2,19 @@ import time
 from abc import ABC, abstractmethod
 
 
+def time_it(method):
+    def wrapper(self, *args, **kwargs):
+        start_time = time.time()
+        result = method(self, *args, **kwargs)
+        end_time = time.time()
+        exec_time = end_time - start_time
+
+        setattr(self, method.__name__ + '_exec_time', exec_time)
+        return result
+
+    return wrapper
+
+
 class SpeedTest(ABC):
     @abstractmethod
     def test_insert_data(self, query, data):
@@ -12,39 +25,30 @@ class SpeedTest(ABC):
         ...
 
 
-class DBSpeedTest(SpeedTest):
+class CHSpeedTest(SpeedTest):
     def __init__(self, db_connection):
         self.db = db_connection
 
+    @time_it
     def test_insert_data(self, query, data):
-        start_time = time.time()
         self.db.execute(query, data)
-        end_time = time.time()
-        return end_time - start_time
 
+    @time_it
     def test_get_data(self, query):
-        start_time = time.time()
         self.db.execute(query)
-        end_time = time.time()
-        return end_time - start_time
 
 
 class VerticaSpeedTest(SpeedTest):
     def __init__(self, cursor):
         self.cursor = cursor
 
+    @time_it
     def test_insert_data(self, query, data):
-        start_time = time.time()
-        with open("test_data/test.csv", "rb") as fs:
+        with open("clickhouse_research/test_data/test.csv", "rb") as fs:
             self.cursor.copy(
                 "COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs
             )
 
-        end_time = time.time()
-        return end_time - start_time
-
+    @time_it
     def test_get_data(self, query):
-        start_time = time.time()
         self.cursor.execute(query)
-        end_time = time.time()
-        return end_time - start_time
