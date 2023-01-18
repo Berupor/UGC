@@ -1,5 +1,6 @@
-from pymongo import MongoClient
 import sys
+
+from pymongo import MongoClient
 
 # sys.path.append('..')
 from research.mongodb_research.config import settings
