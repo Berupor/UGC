@@ -1,6 +1,7 @@
 import time
 from abc import ABC, abstractmethod
 from typing import Generator
+from typing import Optional
 
 
 def time_it(method):
@@ -16,7 +17,7 @@ def time_it(method):
     return wrapper
 
 
-class SpeedTest(ABC):
+class SQLSpeedTest(ABC):
     @abstractmethod
     def test_insert_data(self, query, data):
         ...
@@ -26,7 +27,17 @@ class SpeedTest(ABC):
         ...
 
 
-class CHSpeedTest(SpeedTest):
+class NoSQLSpeedTest(ABC):
+    @abstractmethod
+    def test_insert_data(self, collection, data):
+        ...
+
+    @abstractmethod
+    def test_get_data(self, collection, query):
+        ...
+
+
+class CHSpeedTest(SQLSpeedTest):
     def __init__(self, db_connection):
         self.db = db_connection
 
@@ -39,7 +50,7 @@ class CHSpeedTest(SpeedTest):
         self.db.execute(query)
 
 
-class VerticaSpeedTest(SpeedTest):
+class VerticaSpeedTest(SQLSpeedTest):
     def __init__(self, cursor):
         self.cursor = cursor
 
@@ -55,12 +66,12 @@ class VerticaSpeedTest(SpeedTest):
         self.cursor.execute(query)
 
 
-class MongoSpeedTest(SpeedTest):
+class MongoSpeedTest(NoSQLSpeedTest):
     def __init__(self, client):
         self.client = client
 
-    def test_get_data(self, query):
-        pass
+    def test_get_data(self, collection, query):
+        collection.find(query)
 
     def test_insert_data(self, collection, data):
         collection.insert_one(data)

@@ -21,7 +21,19 @@ def insert():
 
     end_time = time.time()
     exec_time = end_time - start_time
-    print('Запись данных произошла за', round(exec_time, 1), 'секунд')
+    print('Запись данных произошла за', round(exec_time, 5), 'секунд')
+
+
+def read():
+    start_time = time.time()
+
+    mongo_speed_test.test_insert_data(ratings_collection, {})
+
+    end_time = time.time()
+    exec_time = end_time - start_time
+    print('Чтение данных произошла за', round(exec_time, 5), 'секунд')
 
 
 insert()
+read()
+mongo_client.close()
