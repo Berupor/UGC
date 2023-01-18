@@ -1,7 +1,6 @@
 import time
 from abc import ABC, abstractmethod
-from typing import Generator
-from typing import Optional
+from typing import Generator, Optional
 
 
 def time_it(method):
@@ -11,7 +10,7 @@ def time_it(method):
         end_time = time.time()
         exec_time = end_time - start_time
 
-        setattr(self, method.__name__ + '_exec_time', exec_time)
+        setattr(self, method.__name__ + "_exec_time", exec_time)
         return result
 
     return wrapper
