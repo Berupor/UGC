@@ -23,4 +23,4 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: wemake-python-styleguide
-      uses: actions/wemake-python-styleguide
+      uses: wemake-services/wemake-python-styleguide
