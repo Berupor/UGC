@@ -1,4 +1,3 @@
-import os
 import sys
 
 from db.clickhouse.clickhouse_client import ch_client
