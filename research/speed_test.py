@@ -1,5 +1,6 @@
 import time
 from abc import ABC, abstractmethod
+from typing import Generator
 
 
 def time_it(method):
@@ -52,3 +53,14 @@ class VerticaSpeedTest(SpeedTest):
     @time_it
     def test_get_data(self, query):
         self.cursor.execute(query)
+
+
+class MongoSpeedTest(SpeedTest):
+    def __init__(self, client):
+        self.client = client
+
+    def test_get_data(self, query):
+        pass
+
+    def test_insert_data(self, collection, data):
+        collection.insert_one(data)
