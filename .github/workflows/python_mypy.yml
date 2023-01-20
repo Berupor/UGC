@@ -33,3 +33,11 @@ jobs:
       - name: Run mypy
         run: |
           mypy --ignore-missing-imports .
+
+      - name: Send Telegram message on success
+      if: success()
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+      run: |
+        python send_telegram_message.py ${API_TOKEN} ${CHAT_ID} "CI tests passed successfully!"

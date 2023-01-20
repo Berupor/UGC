@@ -28,4 +28,4 @@ uvicorn==0.20.0
 watchfiles==0.18.1
 websockets==10.4
 orjson==3.8.5
-
+python-telegram-bot==20.0
