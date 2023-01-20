@@ -38,8 +38,8 @@ class Settings(BaseSettings):
     class Config:
         #  For local development outside of docker
         env_file = (
-            os.path.join(ENV_DIR, ".env.prod"),
-            os.path.join(ENV_DIR, ".env.dev"),
+            os.path.join(ENV_DIR, ".env.prod.example"),
+            os.path.join(ENV_DIR, ".env.dev.example"),
         )
         env_nested_delimiter = "__"
 
