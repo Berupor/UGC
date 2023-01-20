@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install python-telegram-bot
+
+    - name: Send Telegram message on success
+      if: success()
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+      run: |
+        python .github/tools/send_telegram_message.py ${API_TOKEN} ${CHAT_ID} "CI tests passed successfully!"
