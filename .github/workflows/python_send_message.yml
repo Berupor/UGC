@@ -17,8 +17,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
-        pip install python-telegram-bot
+        pip install -r ugc_service/requirements.txt 
 
     - name: Send Telegram message on success
       if: success()
