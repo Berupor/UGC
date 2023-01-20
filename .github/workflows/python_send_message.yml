@@ -22,7 +22,7 @@ jobs:
     - name: Send Telegram message on success
       if: success()
       env:
-        API_TOKEN: ${{ secrets.API_TOKEN }}
-        CHAT_ID: ${{ secrets.CHAT_ID }}
+        API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
+        CHAT_ID: ${{ secrets.QA_CHAT_ID }}
       run: |
         python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "CI tests passed successfully!"
