@@ -55,7 +55,7 @@ class VerticaSpeedTest(SQLSpeedTest):
 
     @time_it
     def test_insert_data(self, query, data):
-        with open("clickhouse_research/test_data/test.csv", "rb") as fs:
+        with open("./test_data/test.csv", "rb") as fs:
             self.cursor.copy(
                 "COPY test (id, viewpoint, date) FROM stdin DELIMITER ',' ", fs
             )

@@ -1,10 +1,8 @@
-import sys
 import time
 
 from configure.mongo_client import mongo_client
 from test_data.generate_fake_data import generate_ratings, generate_user_likes
 
-sys.path.append("..")
 from research.speed_test import MongoSpeedTest
 
 # Prepare mongo

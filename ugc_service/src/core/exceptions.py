@@ -8,7 +8,7 @@ class ApiException(Exception):
 @dataclass
 class BadRequestException(ApiException):
     message: str = "Invalid request data"
-    extra_information: str = None
+    extra_information: str = "None"
     code: str = "B001"
 
 
@@ -35,3 +35,8 @@ class AuthTokenWithWrongSignatureException(ApiException):
 class AuthTokenInvalidScheme(ApiException):
     message: str = "Invalid authentication scheme"
     code: str = "A005"
+
+
+class AuthTokenExpiredException(ApiException):
+    message: str = "Expired token"
+    code: str = "A006"

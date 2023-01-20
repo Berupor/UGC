@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     mongo: MongoSettings
 
     class Config:
-        env_file = ".env.prod"
+        env_file = "../.env.prod"
         env_nested_delimiter = "__"
 
 

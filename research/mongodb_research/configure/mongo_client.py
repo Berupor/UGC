@@ -1,8 +1,3 @@
-import sys
+from pymongo import MongoClient  # type: ignore
 
-from pymongo import MongoClient
-
-# sys.path.append('..')
-from research.mongodb_research.config import settings
-
-mongo_client = MongoClient("mongodb://root:rootpassword@localhost:27017/")
+mongo_client: MongoClient = MongoClient("mongodb://root:rootpassword@localhost:27017/")
