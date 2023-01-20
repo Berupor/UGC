@@ -5,9 +5,10 @@ from core import exceptions
 from core.config import settings
 from fastapi import Request
 from fastapi.security import HTTPBearer
+from typing import List
 
 
-def decode_and_verify_jwt(token: str, secret_key: str, algorithms: list[str]) -> dict:
+def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
     try:
         decoded_token = jwt.decode(token, secret_key, algorithms=algorithms)
         if decoded_token["exp"] >= time.time():
