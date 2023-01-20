@@ -41,14 +41,14 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.on_event("startup")
 async def startup():
-    # init_ch()
+    init_ch()
     logging.info("initialized connection.")
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    # await kafka_client.stop_producer()
-    # await kafka_client.stop_consumer()
+    await kafka_client.stop_producer()
+    await kafka_client.stop_consumer()
 
     logging.info("closed redis connection.")
 
