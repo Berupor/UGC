@@ -25,4 +25,4 @@ jobs:
         API_TOKEN: ${{ secrets.API_TOKEN }}
         CHAT_ID: ${{ secrets.CHAT_ID }}
       run: |
-        python .github/tools/send_telegram_message.py ${API_TOKEN} ${CHAT_ID} "CI tests passed successfully!"
+        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "CI tests passed successfully!"
