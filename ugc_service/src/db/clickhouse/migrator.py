@@ -1,7 +1,7 @@
 import logging
 from time import sleep
 
-from clickhouse_driver import Client
+from clickhouse_driver import Client  # type: ignore
 
 logging.basicConfig(level=logging.INFO)
 

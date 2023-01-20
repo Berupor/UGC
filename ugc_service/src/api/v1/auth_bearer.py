@@ -1,6 +1,6 @@
 import time
 
-import jwt
+import jwt  # type: ignore
 from core import exceptions
 from core.config import settings
 from fastapi import Request
@@ -34,7 +34,7 @@ class JWTBearer(HTTPBearer):
             user_id = decode_and_verify_jwt(
                 credentials.credentials,
                 settings.fastapi.secret_key,
-                settings.token_algo,
+                [settings.token_algo],
             )["user_id"]
 
             return user_id

@@ -19,7 +19,7 @@ class FastapiSettings(BaseSettings):
     project_name: str
     secret_key: str
     host: str
-    port: str
+    port: int
 
 
 class KafkaSettings(BaseSettings):

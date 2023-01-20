@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     clickhouse: ClickHouseSettings
 
     class Config:
-        env_file = ".env.prod"
+        env_file = "../.env.prod"
         env_nested_delimiter = "__"
 
 
