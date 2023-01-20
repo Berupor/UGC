@@ -28,7 +28,7 @@ jobs:
 
       - name: Run sanity check
         run: |
-          python -m pytest --sanity-check
+          python -m ugc_service/src/main --sanity-check
 
       - name: Run mypy
         run: |
