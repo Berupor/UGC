@@ -2,9 +2,9 @@ name: Mypy and send message
 
 on:
   push:
-    branches: ["development-zelenov-mypy"]
+    branches: ["development"]
   pull_request:
-    branches: ["development-zelenov-mypy"]
+    branches: ["development"]
 
 jobs:
   build:
