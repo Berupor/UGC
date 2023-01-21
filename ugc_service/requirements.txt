@@ -28,3 +28,5 @@ watchfiles==0.18.1
 websockets==10.4
 orjson==3.8.5
 
+wemake-python-styleguide==0.17.0
+flake8-html==0.4.3
