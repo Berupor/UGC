@@ -1,6 +1,7 @@
 aiokafka==0.8.0
+mypy==0.991
+pytest
 clickhouse-driver==0.2.5
-kafka-python==2.0.2
 anyio==3.6.2
 build==0.9.0
 click==8.1.3
@@ -30,3 +31,4 @@ orjson==3.8.5
 
 wemake-python-styleguide==0.17.0
 flake8-html==0.4.3
+python-telegram-bot==20.0

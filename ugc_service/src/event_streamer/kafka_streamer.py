@@ -1,7 +1,7 @@
 import asyncio
 import json
 
-from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
+from aiokafka import AIOKafkaConsumer, AIOKafkaProducer  # type: ignore
 
 from core.config import settings
 
