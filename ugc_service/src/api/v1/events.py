@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Request
 from models.film_watch import FilmWatchEvent
 from models.user import User
 from services.base_service import EventService, get_event_service
+from typing import Tuple
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ async def viewpoint_film(
     request: Request,
     service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
-) -> tuple[str, int]:
+) -> Tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:
         film_id: Id текущего фильма.
