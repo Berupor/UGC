@@ -35,3 +35,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         # save report in html file
         # flake8 . --format=html --htmldir=flake-report
+    - name: Run mypy
+      run: |
+        mypy --ignore-missing-imports .
