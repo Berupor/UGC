@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>ugc_service\src\db\clickhouse\migrator.py - flake8 annotated source</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <h1>
+            <a href="ugc_service.src.db.clickhouse.migrator.report.html">
+               <img src="back.svg" alt="&#x2B05;">
+               ugc_service\src\db\clickhouse\migrator.py source
+            </a>
+         </h1>
+
+         <div id="doc">
+            <div id="l1"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D100
+                     </span>
+                     Missing docstring in public module</li>
+               
+               </ul><tt><i>1</i> <span class="kn">import</span> <span class="nn">logging</span></tt>
+            </div>
+            <div id="l2"
+               class="code sev- "><tt><i>2</i> <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span></tt>
+            </div>
+            <div id="l3"
+               class="code sev- "><tt><i>3</i> &nbsp;</tt>
+            </div>
+            <div id="l4"
+               class="code sev- "><tt><i>4</i> <span class="kn">from</span> <span class="nn">clickhouse_driver</span> <span class="kn">import</span> <span class="n">Client</span></tt>
+            </div>
+            <div id="l5"
+               class="code sev- "><tt><i>5</i> &nbsp;</tt>
+            </div>
+            <div id="l6"
+               class="code sev- "><tt><i>6</i> <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span></tt>
+            </div>
+            <div id="l7"
+               class="code sev- "><tt><i>7</i> &nbsp;</tt>
+            </div>
+            <div id="l8"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>8</i> <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;clickhouse-node1&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l9"
+               class="code sev- "><tt><i>9</i> &nbsp;</tt>
+            </div>
+            <div id="l10"
+               class="code sev- "><tt><i>10</i> &nbsp;</tt>
+            </div>
+            <div id="l11"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D103
+                     </span>
+                     Missing docstring in public function</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS442
+                     </span>
+                     Found outer scope names shadowing: client</li>
+               
+               </ul><tt><i>11</i> <span class="k">def</span> <span class="nf">ch_kafka_queue</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">):</span></tt>
+            </div>
+            <div id="l12"
+               class="code sev- "><tt><i>12</i>     <span class="n">client</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span></tt>
+            </div>
+            <div id="l13"
+               class="code sev-1  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-1">
+                        F541
+                     </span>
+                     F-string is missing placeholders</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS237
+                     </span>
+                     Found a too complex `f` string</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS305
+                     </span>
+                     Found `f` string</li>
+               
+               </ul><tt><i>13</i>         <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l14"
+               class="code sev- "><tt><i>14</i> <span class="s2">            CREATE TABLE IF NOT EXISTS entry_events_queue</span></tt>
+            </div>
+            <div id="l15"
+               class="code sev- "><tt><i>15</i> <span class="s2">                (</span></tt>
+            </div>
+            <div id="l16"
+               class="code sev- "><tt><i>16</i> <span class="s2">                    id String,</span></tt>
+            </div>
+            <div id="l17"
+               class="code sev- "><tt><i>17</i> <span class="s2">                    viewpoint UInt64,</span></tt>
+            </div>
+            <div id="l18"
+               class="code sev- "><tt><i>18</i> <span class="s2">                    datetime_event Datetime</span></tt>
+            </div>
+            <div id="l19"
+               class="code sev- "><tt><i>19</i> <span class="s2">                )</span></tt>
+            </div>
+            <div id="l20"
+               class="code sev- "><tt><i>20</i> <span class="s2">            ENGINE = Kafka</span></tt>
+            </div>
+            <div id="l21"
+               class="code sev- "><tt><i>21</i> <span class="s2">            SETTINGS</span></tt>
+            </div>
+            <div id="l22"
+               class="code sev- "><tt><i>22</i> <span class="s2">            kafka_broker_list = &#39;broker:9192&#39;,</span></tt>
+            </div>
+            <div id="l23"
+               class="code sev- "><tt><i>23</i> <span class="s2">            kafka_topic_list = &#39;views&#39;,</span></tt>
+            </div>
+            <div id="l24"
+               class="code sev- "><tt><i>24</i> <span class="s2">            kafka_group_name = &#39;group_events&#39;,</span></tt>
+            </div>
+            <div id="l25"
+               class="code sev- "><tt><i>25</i> <span class="s2">            kafka_format = &#39;JSONEachRow&#39;,</span></tt>
+            </div>
+            <div id="l26"
+               class="code sev- "><tt><i>26</i> <span class="s2">            kafka_row_delimiter = &#39;</span><span class="se">\n</span><span class="s2">&#39;;</span></tt>
+            </div>
+            <div id="l27"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        C812
+                     </span>
+                     Missing trailing comma</li>
+               
+               </ul><tt><i>27</i> <span class="s2">        &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l28"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS355
+                     </span>
+                     Found an unnecessary blank line before a bracket</li>
+               
+               </ul><tt><i>28</i>     <span class="p">)</span></tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> &nbsp;</tt>
+            </div>
+            <div id="l30"
+               class="code sev- "><tt><i>30</i> &nbsp;</tt>
+            </div>
+            <div id="l31"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D103
+                     </span>
+                     Missing docstring in public function</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS442
+                     </span>
+                     Found outer scope names shadowing: client</li>
+               
+               </ul><tt><i>31</i> <span class="k">def</span> <span class="nf">ch_table</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">):</span></tt>
+            </div>
+            <div id="l32"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS462
+                     </span>
+                     Wrong multiline string usage</li>
+               
+               </ul><tt><i>32</i>     <span class="n">client</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev- "><tt><i>33</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i> <span class="sd">            CREATE TABLE  IF NOT EXISTS  entry_events</span></tt>
+            </div>
+            <div id="l35"
+               class="code sev- "><tt><i>35</i> <span class="sd">                    (</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev- "><tt><i>36</i> <span class="sd">                        id String,</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev- "><tt><i>37</i> <span class="sd">                        viewpoint UInt64,</span></tt>
+            </div>
+            <div id="l38"
+               class="code sev- "><tt><i>38</i> <span class="sd">                        datetime_event Datetime</span></tt>
+            </div>
+            <div id="l39"
+               class="code sev- "><tt><i>39</i> <span class="sd">                    )</span></tt>
+            </div>
+            <div id="l40"
+               class="code sev- "><tt><i>40</i> <span class="sd">                ENGINE = MergeTree PARTITION BY toYYYYMMDD(datetime_event)</span></tt>
+            </div>
+            <div id="l41"
+               class="code sev- "><tt><i>41</i> <span class="sd">                ORDER BY id;</span></tt>
+            </div>
+            <div id="l42"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        C812
+                     </span>
+                     Missing trailing comma</li>
+               
+               </ul><tt><i>42</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l43"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS355
+                     </span>
+                     Found an unnecessary blank line before a bracket</li>
+               
+               </ul><tt><i>43</i>     <span class="p">)</span></tt>
+            </div>
+            <div id="l44"
+               class="code sev- "><tt><i>44</i> &nbsp;</tt>
+            </div>
+            <div id="l45"
+               class="code sev- "><tt><i>45</i> &nbsp;</tt>
+            </div>
+            <div id="l46"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D103
+                     </span>
+                     Missing docstring in public function</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS442
+                     </span>
+                     Found outer scope names shadowing: client</li>
+               
+               </ul><tt><i>46</i> <span class="k">def</span> <span class="nf">ch_kafa_consumer</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">):</span></tt>
+            </div>
+            <div id="l47"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS462
+                     </span>
+                     Wrong multiline string usage</li>
+               
+               </ul><tt><i>47</i>     <span class="n">client</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span></tt>
+            </div>
+            <div id="l48"
+               class="code sev- "><tt><i>48</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l49"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E501
+                     </span>
+                     Line too long (80 > 79 characters)</li>
+               
+               </ul><tt><i>49</i> <span class="sd">        CREATE MATERIALIZED VIEW IF NOT EXISTS materialized_view TO entry_events</span></tt>
+            </div>
+            <div id="l50"
+               class="code sev- "><tt><i>50</i> <span class="sd">        AS SELECT *</span></tt>
+            </div>
+            <div id="l51"
+               class="code sev- "><tt><i>51</i> <span class="sd">        FROM entry_events_queue</span></tt>
+            </div>
+            <div id="l52"
+               class="code sev- "><tt><i>52</i> <span class="sd">        ORDER BY id;</span></tt>
+            </div>
+            <div id="l53"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        C812
+                     </span>
+                     Missing trailing comma</li>
+               
+               </ul><tt><i>53</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l54"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS355
+                     </span>
+                     Found an unnecessary blank line before a bracket</li>
+               
+               </ul><tt><i>54</i>     <span class="p">)</span></tt>
+            </div>
+            <div id="l55"
+               class="code sev- "><tt><i>55</i> &nbsp;</tt>
+            </div>
+            <div id="l56"
+               class="code sev- "><tt><i>56</i> &nbsp;</tt>
+            </div>
+            <div id="l57"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D103
+                     </span>
+                     Missing docstring in public function</li>
+               
+               </ul><tt><i>57</i> <span class="k">def</span> <span class="nf">init_ch</span><span class="p">():</span></tt>
+            </div>
+            <div id="l58"
+               class="code sev- "><tt><i>58</i>     <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></tt>
+            </div>
+            <div id="l59"
+               class="code sev- "><tt><i>59</i>     <span class="n">ch_kafka_queue</span><span class="p">(</span><span class="n">client</span><span class="p">)</span></tt>
+            </div>
+            <div id="l60"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>60</i>     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;created clickhouse kafka_dev queue table&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l61"
+               class="code sev- "><tt><i>61</i>     <span class="n">ch_table</span><span class="p">(</span><span class="n">client</span><span class="p">)</span></tt>
+            </div>
+            <div id="l62"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>62</i>     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;created clickhouse table: entry_events&quot;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l63"
+               class="code sev- "><tt><i>63</i>     <span class="n">ch_kafa_consumer</span><span class="p">(</span><span class="n">client</span><span class="p">)</span></tt>
+            </div>
+            <div id="l64"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>64</i>     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;created clickhouse kafka_dev consumer table&quot;</span><span class="p">)</span></tt>
+            </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>ugc_service\src\core\exceptions.py - flake8 annotated source</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <h1>
+            <a href="ugc_service.src.core.exceptions.report.html">
+               <img src="back.svg" alt="&#x2B05;">
+               ugc_service\src\core\exceptions.py source
+            </a>
+         </h1>
+
+         <div id="doc">
+            <div id="l1"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D100
+                     </span>
+                     Missing docstring in public module</li>
+               
+               </ul><tt><i>1</i> <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span></tt>
+            </div>
+            <div id="l2"
+               class="code sev- "><tt><i>2</i> &nbsp;</tt>
+            </div>
+            <div id="l3"
+               class="code sev- "><tt><i>3</i> &nbsp;</tt>
+            </div>
+            <div id="l4"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>4</i> <span class="k">class</span> <span class="nc">ApiException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></tt>
+            </div>
+            <div id="l5"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS420
+                     </span>
+                     Found wrong keyword: pass</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        WPS604
+                     </span>
+                     Found incorrect node inside `class` body</li>
+               
+               </ul><tt><i>5</i>     <span class="k">pass</span></tt>
+            </div>
+            <div id="l6"
+               class="code sev- "><tt><i>6</i> &nbsp;</tt>
+            </div>
+            <div id="l7"
+               class="code sev- "><tt><i>7</i> &nbsp;</tt>
+            </div>
+            <div id="l8"
+               class="code sev- "><tt><i>8</i> <span class="nd">@dataclass</span></tt>
+            </div>
+            <div id="l9"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>9</i> <span class="k">class</span> <span class="nc">BadRequestException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span></tt>
+            </div>
+            <div id="l10"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>10</i>     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Invalid request data&quot;</span></tt>
+            </div>
+            <div id="l11"
+               class="code sev- "><tt><i>11</i>     <span class="n">extra_information</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span></tt>
+            </div>
+            <div id="l12"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>12</i>     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;B001&quot;</span></tt>
+            </div>
+            <div id="l13"
+               class="code sev- "><tt><i>13</i> &nbsp;</tt>
+            </div>
+            <div id="l14"
+               class="code sev- "><tt><i>14</i> &nbsp;</tt>
+            </div>
+            <div id="l15"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>15</i> <span class="k">class</span> <span class="nc">AuthTokenMissedException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span></tt>
+            </div>
+            <div id="l16"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>16</i>     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Bearer token has not been provided&quot;</span></tt>
+            </div>
+            <div id="l17"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>17</i>     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;A001&quot;</span></tt>
+            </div>
+            <div id="l18"
+               class="code sev- "><tt><i>18</i> &nbsp;</tt>
+            </div>
+            <div id="l19"
+               class="code sev- "><tt><i>19</i> &nbsp;</tt>
+            </div>
+            <div id="l20"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>20</i> <span class="k">class</span> <span class="nc">AuthTokenOutdatedException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span></tt>
+            </div>
+            <div id="l21"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>21</i>     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Token is outdated&quot;</span></tt>
+            </div>
+            <div id="l22"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>22</i>     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;A002&quot;</span></tt>
+            </div>
+            <div id="l23"
+               class="code sev- "><tt><i>23</i> &nbsp;</tt>
+            </div>
+            <div id="l24"
+               class="code sev- "><tt><i>24</i> &nbsp;</tt>
+            </div>
+            <div id="l25"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>25</i> <span class="k">class</span> <span class="nc">AuthTokenInvalidAudience</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span></tt>
+            </div>
+            <div id="l26"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>26</i>     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Invalid token audience&quot;</span></tt>
+            </div>
+            <div id="l27"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>27</i>     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;A003&quot;</span></tt>
+            </div>
+            <div id="l28"
+               class="code sev- "><tt><i>28</i> &nbsp;</tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> &nbsp;</tt>
+            </div>
+            <div id="l30"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>30</i> <span class="k">class</span> <span class="nc">AuthTokenWithWrongSignatureException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span></tt>
+            </div>
+            <div id="l31"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>31</i>     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Token with wrong signature&quot;</span></tt>
+            </div>
+            <div id="l32"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>32</i>     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;A004&quot;</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev- "><tt><i>33</i> &nbsp;</tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i> &nbsp;</tt>
+            </div>
+            <div id="l35"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        D101
+                     </span>
+                     Missing docstring in public class</li>
+               
+               </ul><tt><i>35</i> <span class="k">class</span> <span class="nc">AuthTokenInvalidScheme</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>36</i>     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Invalid authentication scheme&quot;</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev-3  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-3">
+                        Q000
+                     </span>
+                     Double quotes found but single quotes preferred</li>
+               
+               </ul><tt><i>37</i>     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;A005&quot;</span></tt>
+            </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

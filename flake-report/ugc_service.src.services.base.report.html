@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: ugc_service\src\services\base.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="ugc_service.src.services.base.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               ugc_service\src\services\base.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="C812">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>C812:</strong> missing trailing comma
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l16">
+                  <tt><i>16</i>             <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">topic</span><span class="o">=</span><span class="n">topic_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">data</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="WPS110">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>WPS110:</strong> Found wrong variable name: data
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l13">
+                  <tt><i>13</i>         <span class="n">data</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="WPS306">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>WPS306:</strong> Found class without a base class: EventService
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l8">
+                  <tt><i>8</i> <span class="k">class</span> <span class="nc">EventService</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="WPS347">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>WPS347:</strong> Found vague import that may cause confusion: loads
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l1">
+                  <tt><i>1</i> <span class="kn">from</span> <span class="nn">json</span> <span class="kn">import</span> <span class="n">loads</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="WPS404">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>WPS404:</strong> Found complex default value
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l29">
+                  <tt><i>29</i> <span class="k">def</span> <span class="nf">get_event_service</span><span class="p">(</span><span class="n">kafka</span><span class="p">:</span> <span class="n">KafkaClient</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_kafka</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">EventService</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="DAR101">
+               <span class="count sev-3">
+                  2
+               </span>
+               <strong>DAR101:</strong> Missing parameter(s) in Docstring: - group_id
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Missing parameter(s) in Docstring: - group_id:</p>
+               
+               <a href="ugc_service.src.services.base.source.html#l20">
+                  <tt><i>20</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing parameter(s) in Docstring: - topic:</p>
+               
+               <a href="ugc_service.src.services.base.source.html#l20">
+                  <tt><i>20</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="B008">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>B008:</strong> Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l29">
+                  <tt><i>29</i> <span class="k">def</span> <span class="nf">get_event_service</span><span class="p">(</span><span class="n">kafka</span><span class="p">:</span> <span class="n">KafkaClient</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_kafka</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">EventService</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D100">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D100:</strong> Missing docstring in public module
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l1">
+                  <tt><i>1</i> <span class="kn">from</span> <span class="nn">json</span> <span class="kn">import</span> <span class="n">loads</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D101">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D101:</strong> Missing docstring in public class
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l8">
+                  <tt><i>8</i> <span class="k">class</span> <span class="nc">EventService</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D102">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D102:</strong> Missing docstring in public method
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l12">
+                  <tt><i>12</i>     <span class="k">async</span> <span class="k">def</span> <span class="nf">produce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">topic_name</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D103">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D103:</strong> Missing docstring in public function
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l29">
+                  <tt><i>29</i> <span class="k">def</span> <span class="nf">get_event_service</span><span class="p">(</span><span class="n">kafka</span><span class="p">:</span> <span class="n">KafkaClient</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_kafka</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">EventService</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D107">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D107:</strong> Missing docstring in __init__
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l9">
+                  <tt><i>9</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kafka</span><span class="p">:</span> <span class="n">KafkaClient</span><span class="p">):</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D400">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D400:</strong> First line should end with a period
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l20">
+                  <tt><i>20</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D401">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D401:</strong> First line should be in imperative mood; try rephrasing
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l20">
+                  <tt><i>20</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="DAR201">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>DAR201:</strong> Missing "Returns" in Docstring: - return
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l20">
+                  <tt><i>20</i> <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="I001">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>I001:</strong> isort found an import in the wrong position
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l5">
+                  <tt><i>5</i> <span class="kn">from</span> <span class="nn">event_streamer.kafka_streamer</span> <span class="kn">import</span> <span class="n">KafkaClient</span><span class="p">,</span> <span class="n">get_kafka</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="I004">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>I004:</strong> isort found an unexpected blank line in imports
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l4">
+                  <tt><i>4</i> &nbsp;</tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="Q000">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>Q000:</strong> Double quotes found but single quotes preferred
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.services.base.source.html#l14">
+                  <tt><i>14</i>         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

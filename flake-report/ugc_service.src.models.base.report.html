@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: ugc_service\src\models\base.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="ugc_service.src.models.base.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               ugc_service\src\models\base.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="WPS306">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>WPS306:</strong> Found class without a base class: Config
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l19">
+                  <tt><i>19</i>     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="ugc_service.src.models.base.source.html#l28">
+                  <tt><i>28</i>     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E501:</strong> line too long (85 > 79 characters)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l14">
+                  <tt><i>14</i>     <span class="n">datetime_event</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">))</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="WPS111">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>WPS111:</strong> Found too short name: v < 2
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l8">
+                  <tt><i>8</i> <span class="k">def</span> <span class="nf">orjson_dumps</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="WPS305">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>WPS305:</strong> Found `f` string
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l17">
+                  <tt><i>17</i>         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&amp;</span><span class="si">{</span><span class="n">film_id</span><span class="si">}</span><span class="s2">&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D106">
+               <span class="count sev-3">
+                  2
+               </span>
+               <strong>D106:</strong> Missing docstring in public nested class
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l19">
+                  <tt><i>19</i>     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="ugc_service.src.models.base.source.html#l28">
+                  <tt><i>28</i>     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="Q000">
+               <span class="count sev-3">
+                  2
+               </span>
+               <strong>Q000:</strong> Double quotes found but single quotes preferred
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l14">
+                  <tt><i>14</i>     <span class="n">datetime_event</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="ugc_service.src.models.base.source.html#l17">
+                  <tt><i>17</i>         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&amp;</span><span class="si">{</span><span class="n">film_id</span><span class="si">}</span><span class="s2">&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D100">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D100:</strong> Missing docstring in public module
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l1">
+                  <tt><i>1</i> <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D101">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D101:</strong> Missing docstring in public class
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l13">
+                  <tt><i>13</i> <span class="k">class</span> <span class="nc">BaseEventModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D102">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D102:</strong> Missing docstring in public method
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l16">
+                  <tt><i>16</i>     <span class="k">async</span> <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">film_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D103">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D103:</strong> Missing docstring in public function
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l8">
+                  <tt><i>8</i> <span class="k">def</span> <span class="nf">orjson_dumps</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="D400">
+               <span class="count sev-3">
+                  1
+               </span>
+               <strong>D400:</strong> First line should end with a period
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="ugc_service.src.models.base.source.html#l26">
+                  <tt><i>26</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base value class&quot;&quot;&quot;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>
