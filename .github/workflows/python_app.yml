@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install wemake-python-styleguide==0.17.0 flake8-html==0.4.3
+        pip install wemake-python-styleguide==0.17.0 flake8-html==0.4.3 mypy==0.991
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Lint with flake8 (wemake-python-styleguide)
