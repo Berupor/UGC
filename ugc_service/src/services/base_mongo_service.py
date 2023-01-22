@@ -42,10 +42,10 @@ class BaseMongoService:
     async def find(self, query):
         """Find all documents that match the query"""
         cursor = self.collection.find(query)
-        documents = []
+        # documents = []
         async for document in cursor:
-            documents.append(document)
-        return documents
+            yield document
+        # return documents
 
     async def update_one(self, query, update):
         """Update a single document that matches the query"""
