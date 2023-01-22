@@ -19,11 +19,11 @@ router = APIRouter()
 )
 @exception_handler
 async def viewpoint_film(
-    event: FilmWatchEvent,
-    film_id,
-    request: Request,
-    service: EventService = Depends(get_event_service),
-    user_id: User = Depends(JWTBearer()),
+        event: FilmWatchEvent,
+        film_id,
+        request: Request,
+        service: EventService = Depends(get_event_service),
+        user_id: User = Depends(JWTBearer()),
 ) -> Tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:

@@ -28,10 +28,18 @@ class KafkaSettings(BaseSettings):
     topic: str
 
 
+class MongoSettings(BaseSettings):
+    host: str
+    port: int
+    username: str
+    password: str
+
+
 class Settings(BaseSettings):
     token_algo: str
 
     fastapi: FastapiSettings
+    mongo: MongoSettings
     kafka: KafkaSettings
     clickhouse: ClickHouseSettings
 

@@ -4,13 +4,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 class BaseMongoService:
     def __init__(
-        self,
-        db_name,
-        collection_name,
-        host=settings.mongo.host,
-        port=settings.mongo.port,
-        username=settings.mongo.username,
-        password=settings.mongo.password,
+            self,
+            db_name,
+            collection_name,
+            host=settings.mongo.host,
+            port=settings.mongo.port,
+            username=settings.mongo.username,
+            password=settings.mongo.password,
     ):
         self.db_name = db_name
         self.collection_name = collection_name
