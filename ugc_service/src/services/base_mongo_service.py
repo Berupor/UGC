@@ -1,10 +1,12 @@
-import pymongo
+from pymongo import MongoClient
 
 
 class BaseMongoService:
 
     def __init__(self, db_name, collection_name):
-        self.client = pymongo.MongoClient()
+        self.client = MongoClient(
+            "mongodb+srv://eugene:iEW7kga69Y5qJucW@cluster0.t2rby2w.mongodb.net/?retryWrites=true&w=majority")
+
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
@@ -25,4 +27,3 @@ class BaseMongoService:
 
     def close(self):
         self.client.close()
-
