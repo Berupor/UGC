@@ -13,19 +13,16 @@ class ShortReview(BaseModel):
     publication_date: str
 
 
-class FullReview(BaseModel):
-    text: str
-    author: str
-    publication_date: str
+class FullReview(ShortReview):
     movie_id: str
 
 
 @router.post("/{movie_id}")
 async def add_review(
-    movie_id: str,
-    review: ShortReview,
-    review_service: ReviewService = Depends(get_review_service),
-    event_service: EventService = Depends(get_event_service),
+        movie_id: str,
+        review: ShortReview,
+        review_service: ReviewService = Depends(get_review_service),
+        event_service: EventService = Depends(get_event_service),
 ):
     review_document = review.dict()
     review_document["movie_id"] = movie_id
@@ -39,7 +36,7 @@ async def add_review(
 
 @router.get("/{movie_id}")
 async def get_all_reviews(
-    movie_id: str, review_service: ReviewService = Depends(get_review_service)
+        movie_id: str, review_service: ReviewService = Depends(get_review_service)
 ):
     reviews = review_service.find({"movie_id": movie_id})
 
@@ -48,9 +45,9 @@ async def get_all_reviews(
 
 @router.put("/{review_id}")
 async def update_review(
-    review_id: str,
-    review: ShortReview,
-    review_service: ReviewService = Depends(get_review_service),
+        review_id: str,
+        review: ShortReview,
+        review_service: ReviewService = Depends(get_review_service),
 ):
     review_id = ObjectId(review_id)
 
@@ -65,7 +62,7 @@ async def update_review(
 
 @router.delete("/{review_id}")
 async def delete_review(
-    review_id: str, review_service: ReviewService = Depends(get_review_service)
+        review_id: str, review_service: ReviewService = Depends(get_review_service)
 ):
     review_id = ObjectId(review_id)
 
