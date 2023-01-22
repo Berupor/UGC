@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field
 
 
 def orjson_dumps(v, *, default):
-    # orjson.dumps returns bytes and pydantic requires unicode so decode
     return orjson.dumps(v, default=default).decode()
 
 
@@ -18,7 +17,6 @@ class BaseEventModel(BaseModel):
         return f"{user_id}&{film_id}"
 
     class Config:
-        # We replace the standard work with json with a faster one
         json_loads = orjson.loads
         json_dumps = orjson_dumps
 
