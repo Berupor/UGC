@@ -1,4 +1,3 @@
-from pymongo import MongoClient
 from core.config import settings
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -13,9 +12,6 @@ class BaseMongoService:
         username=settings.mongo.username,
         password=settings.mongo.password,
     ):
-        # self.client = AsyncIOMotorClient("mongodb://root:rootpassword@localhost:27017/")
-        # self.db = self.client[db_name]
-        # self.collection = self.db[collection_name]
         self.db_name = db_name
         self.collection_name = collection_name
         self.client = AsyncIOMotorClient(
@@ -42,10 +38,8 @@ class BaseMongoService:
     async def find(self, query):
         """Find all documents that match the query"""
         cursor = self.collection.find(query)
-        # documents = []
         async for document in cursor:
             yield document
-        # return documents
 
     async def update_one(self, query, update):
         """Update a single document that matches the query"""
