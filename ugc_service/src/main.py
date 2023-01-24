@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 
-from api.v1 import events
+from api.v1 import events, review
 from api.v1.decorators import exception_handler
 from core import exceptions
 from core.config import settings
@@ -41,7 +41,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.on_event("startup")
 async def startup():
-    init_ch()
+    # init_ch()
     logging.info("initialized connection.")
 
 
@@ -54,9 +54,11 @@ async def shutdown():
 
 
 app.include_router(events.router, prefix="/api/v1/events", tags=["Запись событий"])
+app.include_router(review.router, prefix="/api/v1/reviews", tags=["Review"])
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host=settings.fastapi.host,
         port=settings.fastapi.port,
+        reload=True
     )

@@ -17,44 +17,57 @@ users_collection.delete_many({})
 mongo_speed_test = MongoSpeedTest(mongo_client)
 
 
-def insert(collection, generator):
-    start_time = time.time()
+def measure_time(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__doc__}: выполнилось за {round(end - start, 4)} секунд")
+        return result
 
-    for rating in generator():
+    return wrapper
+
+
+@measure_time
+def insert(collection, generator):
+    """Запись данных"""
+    for rating in generator(3000):
         mongo_speed_test.test_insert_data(collection, rating)
 
-    end_time = time.time()
-    print("Запись данных произошла за", round(end_time - start_time, 3), "секунд")
 
-
+@measure_time
 def read():
-    start_time = time.time()
-
-    query = {"likes": {"$gt": 1000}}
-    mongo_speed_test.test_get_data(ratings_collection, query)
-
-    end_time = time.time()
-    print("Чтение данных произошло за", round(end_time - start_time, 5), "секунд")
+    """Чтение данных"""
+    mongo_speed_test.test_get_data(ratings_collection, {"likes": {"$gt": 1000}})
 
 
 def real_time_read():
-    data = {"name": "movie5", "likes": 1000, "dislikes": 500}
-    ratings_collection.insert_one(data)
+    ratings_collection.insert_one({"name": "movie5", "likes": 1000, "dislikes": 500})
 
     start_time = time.time()
-    ratings_collection.find({"name": "movie"})
-    end_time = time.time()
 
+    movie_data = mongo_speed_test.test_get_data(ratings_collection, {"name": "movie5"})
+    while not movie_data:
+        movie_data = mongo_speed_test.test_get_data(
+            ratings_collection, {"name": "movie5"}
+        )
+
+    end_time = time.time()
     print(
-        "Real-time чтение данных произошло за: ",
-        round(end_time - start_time, 5),
+        "Real-time чтение данных выполнилось за:",
+        round(end_time - start_time, 4),
         "секунд",
     )
 
 
-insert(ratings_collection, generate_ratings)
-insert(users_collection, generate_user_likes)
-read()
-real_time_read()
+def main():
+    insert(ratings_collection, generate_ratings)
+    insert(users_collection, generate_user_likes)
+    read()
+    real_time_read()
 
-mongo_client.close()
+    mongo_client.close()
+
+
+if __name__ == "__main__":
+    main()
