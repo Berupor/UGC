@@ -21,6 +21,8 @@ services:
     restart: always
     expose:
       - "2181"
+#    volumes:
+#      - ./confluent/zookeeper/data:/var/lib/zookeeper/data
     networks:
       - zookeeper
     environment:
@@ -62,6 +64,8 @@ services:
       - "29092:29092"
       - "9092:9092"
       - "9192:9192"
+#    volumes:
+#      - ./confluent/kafka/data:/var/lib/kafka/data
     networks:
       - broker
     environment:
@@ -103,7 +107,7 @@ services:
     networks:
       - connect
     volumes:
-      - ./jars:/usr/share/java/confluent_hub_components
+      - ./confluent/connect/jars:/usr/share/java/confluent_hub_components
     ports:
       - "8083:8083"
       - "9102:9102"
