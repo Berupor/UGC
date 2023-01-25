@@ -12,6 +12,7 @@ from core import exceptions
 from core.config import settings
 from db.clickhouse.migrator import init_ch
 from event_streamer.kafka_streamer import kafka_client
+from event_streamer.connect.create_connections import init_connections
 
 app = FastAPI(
     title="API для получения и обработки данных пользовательского поведения",
@@ -42,6 +43,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.on_event("startup")
 async def startup():
+    await init_connections()
     # init_ch()
     logging.info("initialized connection.")
 

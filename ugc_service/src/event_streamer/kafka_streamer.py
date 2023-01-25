@@ -78,9 +78,7 @@ class KafkaClient:
         )
 
     async def consume_messages(
-        self,
-        topic,
-        group_id=None,
+        self, topic, group_id=None,
     ):
         if not self.consumer:
             await self._start_consumer(topic, group_id)
