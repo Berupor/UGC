@@ -1,15 +1,15 @@
 {
-  "name": "rating-mongo-sink-connector",
+  "name": "bookmarks-mongo-sink-connector",
   "config": {
     "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
     "tasks.max": "1",
     "errors.log.include.messages": "true",
-    "topics": "rating",
+    "topics": "bookmarks",
     "errors.deadletterqueue.topic.name": "",
     "errors.deadletterqueue.context.headers.enable": "true",
     "connection.uri": "mongodb://mongodb:27017",
     "database": "events",
-    "collection": "rating",
+    "collection": "bookmarks",
     "max.num.retries": "5",
     "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneDefaultStrategy",
     "value.projection.type": "whitelist",

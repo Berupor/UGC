@@ -147,38 +147,6 @@ services:
     depends_on:
       - zookeeper
 
-#  clickhouse-node2:
-#    image: yandex/clickhouse-server:21.7.4
-#    container_name: clickhouse-node2
-#    hostname: clickhouse-node2
-#    networks:
-#      - clickhouse
-#    volumes:
-#      - ./ugc_service/src/db/clickhouse/data/node2:/etc/clickhouse-server
-#    depends_on:
-#      - zookeeper
-#
-#  clickhouse-node3:
-#    image: yandex/clickhouse-server:21.7.4
-#    container_name: clickhouse-node3
-#    hostname: clickhouse-node3
-#    networks:
-#      - clickhouse
-#    volumes:
-#      - ./ugc_service/src/db/clickhouse/data/node3:/etc/clickhouse-server
-#    depends_on:
-#      - zookeeper
-#
-#  clickhouse-node4:
-#    image: yandex/clickhouse-server:21.7.4
-#    container_name: clickhouse-node4
-#    hostname: clickhouse-node4
-#    networks:
-#      - clickhouse
-#    volumes:
-#      -  ./ugc_service/src/db/clickhouse/data/node4:/etc/clickhouse-server
-#    depends_on:
-#      - zookeeper
   mongodb:
     image: mongo:4.2-rc-bionic
     hostname: mongodb

@@ -24,12 +24,12 @@ async def add_review(
         review_service: ReviewService = Depends(get_review_service),
         event_service: EventService = Depends(get_event_service),
 ):
-    review_document = review.dict()
-    review_document["movie_id"] = movie_id
+    # review_document = review.dict()
+    # review_document["movie_id"] = movie_id
 
-    await review_service.insert_one(review_document)
+    # await review_service.insert_one(review_document)
 
-    # await event_service.produce(key=movie_id, topic_name="reviews", model=review_document)
+    await event_service.produce(key=movie_id, topic_name="reviews", model=review)
 
     return {"message": "Review added successfully."}
 
