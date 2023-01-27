@@ -1,0 +1,21 @@
+curl --request POST \
+  --url http://localhost:8083/connectors \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "mongo-sink-connector",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "tasks.max": "1",
+    "errors.log.include.messages": "true",
+    "topics": "rating",
+    "errors.deadletterqueue.topic.name": "",
+    "errors.deadletterqueue.context.headers.enable": "true",
+    "connection.uri": "mongodb://mongodb:27017",
+    "database": "events",
+    "collection": "rating",
+    "max.num.retries": "5",
+    "document.id.strategy.overwrite.existing": true,
+    "mongo.errors.tolerance": "all",
+    "mongo.errors.log.enable": "true"
+  }
+}'
