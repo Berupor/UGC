@@ -28,11 +28,6 @@ class KafkaSettings(BaseSettings):
     topic: str
 
 
-class ConnectSettings(BaseSettings):
-    host: str
-    port: int
-
-
 class MongoSettings(BaseSettings):
     host: str
     port: int
@@ -46,7 +41,6 @@ class Settings(BaseSettings):
     fastapi: FastapiSettings
     mongo: MongoSettings
     kafka: KafkaSettings
-    connect: ConnectSettings
     clickhouse: ClickHouseSettings
 
     class Config:
