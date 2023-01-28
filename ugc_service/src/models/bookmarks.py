@@ -1,7 +1,7 @@
 from pydantic import Field
 
-from models.base import BaseEventModel
+from models.base_mongo import BaseMongoModel
 
 
-class Bookmarks(BaseEventModel):
+class Bookmarks(BaseMongoModel):
     status: bool = Field(default=True)
