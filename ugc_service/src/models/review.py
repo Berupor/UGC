@@ -3,11 +3,11 @@ from uuid import UUID
 from bson import ObjectId
 from pydantic import Field as PydanticField
 
-from models.base import BaseOrjson
+from models.base import BaseEventModel
 from models.object_id import PyObjectId
 
 
-class ShortReview(BaseOrjson):
+class ShortReview(BaseEventModel):
     text: str
     movie_id: UUID
     author_id: UUID
@@ -20,4 +20,4 @@ class ShortReview(BaseOrjson):
 
 
 class FullReview(ShortReview):
-    publication_date: str
+    ...

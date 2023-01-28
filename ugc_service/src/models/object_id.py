@@ -1,8 +1,4 @@
-from uuid import UUID
-
 from bson import ObjectId
-from pydantic import BaseModel
-from pydantic import Field as PydanticField
 
 
 class PyObjectId(ObjectId):

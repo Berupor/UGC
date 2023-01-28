@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from models.base import BaseOrjson
+from pydantic import BaseModel
 
 
-class User(BaseOrjson):
+class User(BaseModel):
     user_id: UUID

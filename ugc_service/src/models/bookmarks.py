@@ -1,7 +1,7 @@
 from pydantic import Field
 
-from models.base import BaseOrjson
+from models.base import BaseEventModel
 
 
-class Bookmarks(BaseOrjson):
+class Bookmarks(BaseEventModel):
     status: bool = Field(default=True)
