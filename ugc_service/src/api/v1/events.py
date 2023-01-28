@@ -12,22 +12,22 @@ router = APIRouter()
 
 
 @router.post(
-    "/{film_id}/viewpoint",
+    "/{movie_id}/viewpoint",
     summary="Получение отметки о просмотре фильма",
     description="Получение данных о том, сколько времени пользователь посмотрел фильм.",
     response_description="Статус обработки данных",
 )
 @exception_handler
 async def viewpoint_film(
-    event: FilmWatchEvent,
-    film_id,
-    request: Request,
-    service: EventService = Depends(get_event_service),
-    user_id: User = Depends(JWTBearer()),
+        event: FilmWatchEvent,
+        movie_id,
+        request: Request,
+        service: EventService = Depends(get_event_service),
+        user_id: User = Depends(JWTBearer()),
 ) -> Tuple[str, int]:
     """Обработка полученных данных о событии.
     Args:
-        film_id: Id текущего фильма.
+        movie_id: Id текущего фильма.
         event: Данные о событии.
         request: Значения запроса.
         service: Сервис для работы с Кафка.
@@ -35,6 +35,5 @@ async def viewpoint_film(
         Execution status.
         user_id: Id пользователя
     """
-    key = await event.get_key(user_id, film_id)
-    await service.produce(key=key, topic_name="views", model=event)
+    await service.produce(key=f"{user_id}&{movie_id}", topic_name="views", data=event)
     return HTTPStatus.OK.phrase, 200

@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/{film_id}",
+    "/{movie_id}",
     summary="Закладки пользователя",
     description="",
     response_description="",
@@ -20,14 +20,14 @@ router = APIRouter()
 @exception_handler
 async def bookmarks(
     event: Bookmarks,
-    film_id,
+    movie_id,
     request: Request,
     service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
 ) -> Tuple[str, int]:
     """Processing received event data.
     Args:
-        film_id: Id current film.
+        movie_id: Id current film.
         event: event data.
         request: request value.
         service: login execution by endpoint.
@@ -35,6 +35,6 @@ async def bookmarks(
     Returns:
         Execution status.
     """
-    key = await event.get_key(user_id, film_id)
+    key = await event.get_key(user_id, movie_id)
     await service.produce(key=key, topic_name="bookmarks", model=event)
     return HTTPStatus.OK.phrase, 200
