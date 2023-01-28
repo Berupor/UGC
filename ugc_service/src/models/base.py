@@ -1,9 +1,10 @@
 from datetime import datetime
 from uuid import UUID
-from models.user import User
 
 import orjson
 from pydantic import BaseModel, Field
+
+from models.user import User
 
 
 def orjson_dumps(v, *, default):
@@ -21,7 +22,7 @@ class BaseEventModel(BaseModel):
         json_dumps = orjson_dumps
 
 
-class BaseEventValue(BaseModel):
+class BaseOrjson(BaseModel):
     """Base value class"""
 
     class Config:
