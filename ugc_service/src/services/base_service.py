@@ -11,13 +11,12 @@ class EventService:
     def __init__(self, kafka: KafkaClient):
         self.kafka_client = kafka
 
-    async def produce(self, key: str, topic_name: str, data: Union[Dict, Any[BaseModel]]) -> None:
+    async def produce(self, key: str, topic_name: str, data: Union[Dict, BaseModel]) -> None:
         if type(data) != dict:
-            data = loads(data.json())  # type: ignore
+            data = data.json()  # type: ignore
 
-        data["id"] = key
         await self.kafka_client.produce_message(
-            key=str.encode(key), topic=topic_name, value=data
+            key=str.encode(key), topic=topic_name, value=loads(data)
         )
 
     async def consume(self, topic: str, group_id=None) -> AsyncGenerator:
