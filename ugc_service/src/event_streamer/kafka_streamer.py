@@ -4,6 +4,7 @@ import json
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer  # type: ignore
 
 from core.config import settings
+from typing import AsyncGenerator
 
 
 class KafkaClient:
@@ -79,7 +80,7 @@ class KafkaClient:
 
     async def consume_messages(
         self, topic, group_id=None,
-    ):
+    ) -> AsyncGenerator:
         if not self.consumer:
             await self._start_consumer(topic, group_id)
 

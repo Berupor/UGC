@@ -37,7 +37,7 @@ async def request_connect(http_client: aiohttp.ClientSession, json_connect: dict
 
 async def init_connections():
     http_client = aiohttp.ClientSession()
-    for json_connect, file_connect in read_properties_files(r"/src/event_streamer/connect/connections"):
+    for json_connect, file_connect in read_properties_files(r"./event_streamer/connect/connections"):
         response = await request_connect(http_client, json_connect)
         logging.info(f"status: {response.status}")
         if HTTPStatus.CREATED != response.status:
