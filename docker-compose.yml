@@ -1,18 +1,18 @@
 services:
-#  nginx:
-#    image: nginx:latest
-#    restart: always
-#    expose:
-#      - "80"
-#    networks:
-#      - nginx
-#    volumes:
-#      - ./ugc_service/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-#      - ./ugc_service/src/nginx/configs:/etc/nginx/conf.d:ro
-#    depends_on:
-#      - ugc
-#    ports:
-#      - "80:80"
+  nginx:
+    image: nginx:latest
+    restart: always
+    expose:
+      - "80"
+    networks:
+      - nginx
+    volumes:
+      - ./ugc_service/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ugc_service/src/nginx/configs:/etc/nginx/conf.d:ro
+    depends_on:
+      - ugc
+    ports:
+      - "80:80"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.1.2
@@ -21,8 +21,8 @@ services:
     restart: always
     expose:
       - "2181"
-#    volumes:
-#      - ./confluent/zookeeper/data:/var/lib/zookeeper/data
+    volumes:
+      - ./confluent/zookeeper/data:/var/lib/zookeeper/data
     networks:
       - zookeeper
     environment:
@@ -30,17 +30,17 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
       ALLOW_ANONYMOUS_LOGIN: yes
 
-#  ugc:
-#    build: ugc_service
-#    restart: always
-#    expose:
-#      - "8000"
-#    depends_on:
-#      - connect
-#    networks:
-#      - ugc
-#    env_file:
-#      - ./.env.prod
+  ugc:
+    build: ugc_service
+    restart: always
+    expose:
+      - "8000"
+    depends_on:
+      - connect
+    networks:
+      - ugc
+    env_file:
+      - ./.env.prod
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
@@ -133,19 +133,19 @@ services:
       KAFKA_JMX_PORT: 9102
       KAFKA_JMX_HOSTNAME: localhost
 
-#  clickhouse-node1:
-#    image: yandex/clickhouse-server:21.7.4
-#    container_name: clickhouse-node1
-#    hostname: clickhouse-node1
-#    expose:
-#      - "8123"
-#      - "9000"
-#    networks:
-#      - clickhouse
-#    volumes:
-#      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
-#    depends_on:
-#      - zookeeper
+  clickhouse-node1:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node1
+    hostname: clickhouse-node1
+    expose:
+      - "8123"
+      - "9000"
+    networks:
+      - clickhouse
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
 
   mongodb:
     image: mongo:4.2-rc-bionic
@@ -161,10 +161,10 @@ services:
 
 
 networks:
-#  nginx:
-#    name: ugc_net
-#  ugc:
-#    name: ugc_net
+  nginx:
+    name: ugc_net
+  ugc:
+    name: ugc_net
   zookeeper:
     name: ugc_net
   kafdrop:
@@ -175,7 +175,7 @@ networks:
     name: ugc_net
   connect:
     name: ugc_net
-#  clickhouse:
-#    name: ugc_net
+  clickhouse:
+    name: ugc_net
   mongodb:
     name: ugc_net
