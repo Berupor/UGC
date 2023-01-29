@@ -1,22 +1,24 @@
 from http import HTTPStatus
+from typing import Dict, List, Type
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Request
-from fastapi import HTTPException
-from typing import List, Type, Dict
-from api.v1.auth_bearer import JWTBearer
-from api.v1.decorators import exception_handler
-from models.rating import MovieRating, ReviewRating, Rating
-from models.user import User
+from fastapi import APIRouter, Depends, HTTPException, Request
 
+from api.v1.utils.auth_bearer import JWTBearer
+from api.v1.utils.decorators import exception_handler
+from models.rating import MovieRating, Rating, ReviewRating
+from models.user import User
 from services.base_service import EventService, get_event_service
-from services.rating_service import get_rating_service, RatingService
+from services.rating_service import RatingService, get_rating_service
 
 router = APIRouter()
 
 
-async def get_ratings(filter: Dict, rating_class: Type[Rating],
-                      rating_service: RatingService = get_rating_service()) -> List[Rating]:
+async def get_ratings(
+    filter: Dict,
+    rating_class: Type[Rating],
+    rating_service: RatingService = get_rating_service(),
+) -> List[Rating]:
     ratings = rating_service.find(filter)
     return [rating_class(**review) async for review in ratings]
 
@@ -29,12 +31,12 @@ async def get_ratings(filter: Dict, rating_class: Type[Rating],
 )
 @exception_handler
 async def add_movie_rating(
-        event: MovieRating,
-        movie_id,
-        request: Request,
-        event_service: EventService = Depends(get_event_service),
-        user_id: User = Depends(JWTBearer()),
-        rating_service: RatingService = Depends(get_rating_service)
+    event: MovieRating,
+    movie_id,
+    request: Request,
+    event_service: EventService = Depends(get_event_service),
+    user_id: User = Depends(JWTBearer()),
+    rating_service: RatingService = Depends(get_rating_service),
 ):
     """Processing getting event data.
     Args:
@@ -46,9 +48,11 @@ async def add_movie_rating(
     Returns:
         Execution status.
     """
-    event.author_id = user_id
+    event.user_id = str(user_id)
     event.movie_id = movie_id
-    if rating := await rating_service.find_one({'movie_id': movie_id, 'author_id': user_id}):
+    if rating := await rating_service.find_one(
+        {"movie_id": movie_id, "user_id": event.user_id}
+    ):
         """
         Тут должна быть логика на то,
         что если рейтинг существует,
@@ -61,16 +65,21 @@ async def add_movie_rating(
 
 
 @router.get("/movie/{movie_id}")
+@exception_handler
 async def get_all_movie_ratings(movie_id: str) -> List[Rating]:
     return await get_ratings({"movie_id": movie_id}, MovieRating)
 
 
 @router.delete("/movie/{rating_id}")
+@exception_handler
 async def delete_movie_rating(
-        rating_id: str, rating_service: RatingService = Depends(get_rating_service),
-        user_id: User = Depends(JWTBearer())
+    rating_id: str,
+    rating_service: RatingService = Depends(get_rating_service),
+    user_id: User = Depends(JWTBearer()),
 ):
-    result = await rating_service.delete_one({"_id": ObjectId(rating_id), "author_id": user_id})
+    result = await rating_service.delete_one(
+        {"_id": ObjectId(rating_id), "user_id": str(user_id)}
+    )
     if result:
         return HTTPStatus.NO_CONTENT
     else:
@@ -82,38 +91,44 @@ async def delete_movie_rating(
 )
 @exception_handler
 async def add_review_rating(
-        event: ReviewRating,
-        review_id,
-        request: Request,
-        event_service: EventService = Depends(get_event_service),
-        user_id: User = Depends(JWTBearer()),
-        rating_service: RatingService = Depends(get_rating_service)
+    event: ReviewRating,
+    review_id,
+    request: Request,
+    event_service: EventService = Depends(get_event_service),
+    user_id: User = Depends(JWTBearer()),
+    rating_service: RatingService = Depends(get_rating_service),
 ):
-    event.author_id = user_id
+    event.user_id = str(user_id)
     event.review_id = review_id
-    if rating := await rating_service.find_one({'review_id': review_id, 'author_id': user_id}):
+    if rating := await rating_service.find_one(
+        {"review_id": review_id, "user_id": user_id}
+    ):
         """
         Тут должна быть логика на то,
         что если рейтинг существует,
         то отправить событие на обновление данных.
         """
-
     await rating_service.insert_one(event.dict())
     await event_service.produce(key=review_id, topic_name="rating", data=event)
     return HTTPStatus.CREATED
 
 
 @router.get("/review/{review_id}")
+@exception_handler
 async def get_all_review_ratings(review_id: str) -> List[Rating]:
     return await get_ratings({"review_id": review_id}, ReviewRating)
 
 
 @router.delete("/review/{rating_id}")
+@exception_handler
 async def delete_review_rating(
-        rating_id: str, rating_service: RatingService = Depends(get_rating_service),
-        user_id: User = Depends(JWTBearer())
+    rating_id: str,
+    rating_service: RatingService = Depends(get_rating_service),
+    user_id: User = Depends(JWTBearer()),
 ):
-    result = await rating_service.delete_one({"_id": ObjectId(rating_id), "author_id": user_id})
+    result = await rating_service.delete_one(
+        {"_id": ObjectId(rating_id), "user_id": str(user_id)}
+    )
     if result:
         return HTTPStatus.NO_CONTENT
     else:

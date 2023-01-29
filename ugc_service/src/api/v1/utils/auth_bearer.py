@@ -1,11 +1,12 @@
 import time
+from typing import List
 
 import jwt  # type: ignore
-from core import exceptions
-from core.config import settings
 from fastapi import Request
 from fastapi.security import HTTPBearer
-from typing import List
+
+from core import exceptions
+from core.config import settings
 
 
 def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
