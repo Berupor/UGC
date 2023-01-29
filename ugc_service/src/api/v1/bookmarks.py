@@ -1,10 +1,11 @@
 from http import HTTPStatus
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
+from models.base_mongo import PyObjectId
 from models.bookmarks import Bookmark
 from models.user import User
 from services.base_service import EventService, get_event_service
@@ -19,7 +20,7 @@ router = APIRouter()
 @exception_handler
 async def add_bookmark(
     event: Bookmark,
-    movie_id,
+    movie_id: PyObjectId = Path(..., alias="movie_id"),
     service: EventService = Depends(get_event_service),
     bookmark_service: BookmarksService = Depends(get_bookmarks_service),
     user_id: User = Depends(JWTBearer()),
@@ -36,24 +37,16 @@ async def add_bookmark(
     """
     event.user_id = str(user_id)
     event.movie_id = movie_id
-    if bookmark := await bookmark_service.find_one(
-        {"movie_id": movie_id, "user_id": user_id}
-    ):
-        """
-        Тут должна быть логика на то,
-        что если bookmark существует,
-        то отправить событие на обновление данных.
-        """
 
     await bookmark_service.insert_one(event.dict())
-    await service.produce(key=movie_id, topic_name="bookmarks", data=event)
+    await service.produce(key=str(movie_id), topic_name="bookmarks", data=event)
     return HTTPStatus.CREATED
 
 
 @router.get("/{movie_id}")
 @exception_handler
 async def get_all_bookmarks(
-    movie_id: str,
+    movie_id: PyObjectId = Path(..., alias="movie_id"),
     bookmark_service: BookmarksService = Depends(get_bookmarks_service),
     user_id: User = Depends(JWTBearer()),
 ) -> list[Bookmark]:
@@ -65,13 +58,11 @@ async def get_all_bookmarks(
 @router.delete("/{bookmark_id}")
 @exception_handler
 async def delete_bookmark(
-    bookmark_id: str,
+    bookmark_id: PyObjectId = Path(..., alias="bookmark_id"),
     bookmark_service: BookmarksService = Depends(get_bookmarks_service),
     user_id: User = Depends(JWTBearer()),
 ):
-    result = await bookmark_service.delete_one(
-        {"_id": ObjectId(bookmark_id), "user_id": user_id}
-    )
+    result = await bookmark_service.delete_one({"_id": bookmark_id, "user_id": user_id})
     if result:
         return HTTPStatus.NO_CONTENT
     else:

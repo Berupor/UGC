@@ -2,7 +2,7 @@ from http import HTTPStatus
 from typing import List
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
@@ -36,28 +36,12 @@ async def add_review(
 @router.get("/{movie_id}")
 async def get_all_reviews(
     movie_id: str,
-    sort: str = "rating",
     review_service: ReviewService = Depends(get_review_service),
 ) -> List[FullReview]:
-    reviews = review_service.find({"movie_id": movie_id}, sort=sort)
+
+    reviews = review_service.find({"movie_id": movie_id})
+    # return {'sussecc'}
     return [FullReview(**review) async for review in reviews]
-
-
-# @router.put("/{review_id}")
-# async def update_review(
-#         review_id: str,
-#         review: ShortReview,
-#         review_service: ReviewService = Depends(get_review_service),
-# ):
-#     review_id = ObjectId(review_id)
-#
-#     result = await review_service.update_one(
-#         {"_id": review_id}, {"$set": review.dict()}
-#     )
-#     if result:
-#         return {"message": "Review updated successfully"}
-#     else:
-#         raise HTTPException(status_code=404, detail="Review not found")
 
 
 @exception_handler
