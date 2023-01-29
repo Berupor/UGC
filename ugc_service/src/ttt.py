@@ -55,17 +55,51 @@
 
 
 # =[=[[=[[[[=[=[=[[[=[=]]]]]]]]]]]]]
-from event_streamer.kafka_streamer import get_kafka
-import asyncio
 
-stream = get_kafka()
+# from pymongo import MongoClient
+#
+# client = MongoClient('mongodb://localhost:27017/')  # type: ignore
+# db = client['movies']
+#
+# pipeline = [
+#     {
+#         "$lookup": {
+#             "from": "rating",
+#             "localField": "_id",
+#             "foreignField": "review_id",
+#             "as": "likes"
+#         }
+#     },
+#     {
+#         "$addFields": {
+#             "likes_count": {"$size": "$likes"}
+#         }
+#     }
+# ]
+#
+# data = list(db.reviews.aggregate(pipeline))  # type: ignore
+# for d in data:
+#     print(d)
+#
+from pymongo import MongoClient
 
+client = MongoClient()
+db = client['movies']
+reviews = db['reviews']
+ratings = db['rating']
+bookmarks = db['bookmarks']
 
-async def get_messages():
-    generator = stream.consume_messages("reviews")
+pipeline = [{"$lookup": {
+         "from": "rating",
+         "localField": "_id",
+         "foreignField": "review_id",
+         "as": "ratings",
+   }
+}]
 
-    async for message in generator:
-        print(message)
-
-
-asyncio.run(get_messages())
+# result = reviews.aggregate(pipeline)
+# for d in result:
+#     print(d)
+reviews.delete_many({})
+bookmarks.delete_many({})
+ratings.delete_many({})

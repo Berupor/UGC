@@ -7,4 +7,4 @@ class ShortReview(BaseMongoModel):
 
 
 class FullReview(ShortReview):
-    likes: list
+    likes: list | None | int

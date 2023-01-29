@@ -11,13 +11,36 @@ class ReviewService(BaseMongoService):
         super().__init__(db_name, collection_name)
         self.rating_service = get_rating_service()
 
-    async def find(self, query, sort=None) -> AsyncGenerator:
+    async def find(self, query):
         """Find all documents that match the query"""
-        cursor = self.collection.find(query).sort(sort, 1)
+        pipeline = [
+            {"$match": {**query}},
+            {
+                "$lookup": {
+                    "from": "rating",
+                    "localField": "_id",
+                    "foreignField": "review_id",
+                    "as": "likes",
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$_id",
+                    "created_at": {"$first": "$created_at"},
+                    "user_id": {"$first": "$user_id"},
+                    "text": {"$first": "$text"},
+                    "movie_id": {"$first": "$movie_id"},
+                    "likes": {"$sum": {"$size": "$likes"}}
+                }
+            },
+            {
+                "$sort": {
+                    "likes": -1
+                }}
+        ]
+
+        cursor = self.collection.aggregate(pipeline)
         async for document in cursor:
-            document["likes"] = await self.rating_service.get_review_rating(
-                "review_id", document["_id"]
-            )
             yield document
 
 
