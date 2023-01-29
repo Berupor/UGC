@@ -1,5 +1,6 @@
-from pydantic import Field, Extra
 from bson import ObjectId
+from pydantic import Extra, Field
+
 from models.base_mongo import BaseMongoModel, PyObjectId
 
 
@@ -8,8 +9,8 @@ class Rating(BaseMongoModel):
 
 
 class MovieRating(Rating):
-    movie_id: str = ''
+    movie_id: str = ""
 
 
 class ReviewRating(Rating):
-    review_id: PyObjectId = None
+    review_id: PyObjectId = None  # type: ignore

@@ -34,7 +34,7 @@ class BaseMongoService:
         document = await self.collection.find_one(query)
         return document
 
-    async def find(self, query) -> AsyncGenerator:
+    async def find(self, query, sort_field="", order="") -> AsyncGenerator:
         """Find all documents that match the query"""
         cursor = self.collection.find(query)
         async for document in cursor:

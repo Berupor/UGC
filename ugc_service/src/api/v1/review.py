@@ -2,7 +2,7 @@ from http import HTTPStatus
 from typing import List
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, Path, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
@@ -36,11 +36,12 @@ async def add_review(
 @router.get("/{movie_id}")
 async def get_all_reviews(
     movie_id: str,
+    sort: str = Query(default="likes", alias="sort"),
     review_service: ReviewService = Depends(get_review_service),
 ) -> List[FullReview]:
-
-    reviews = review_service.find({"movie_id": movie_id})
-    # return {'sussecc'}
+    reviews = review_service.find(
+        {"movie_id": movie_id}, sort_field=sort, order=-1 if sort.startswith("-") else 1
+    )
     return [FullReview(**review) async for review in reviews]
 
 

@@ -11,7 +11,7 @@ class ReviewService(BaseMongoService):
         super().__init__(db_name, collection_name)
         self.rating_service = get_rating_service()
 
-    async def find(self, query):
+    async def find(self, query, sort_field="", order="") -> AsyncGenerator:
         """Find all documents that match the query"""
         pipeline = [
             {"$match": {**query}},
@@ -30,13 +30,10 @@ class ReviewService(BaseMongoService):
                     "user_id": {"$first": "$user_id"},
                     "text": {"$first": "$text"},
                     "movie_id": {"$first": "$movie_id"},
-                    "likes": {"$sum": {"$size": "$likes"}}
+                    "likes": {"$sum": {"$size": "$likes"}},
                 }
             },
-            {
-                "$sort": {
-                    "likes": -1
-                }}
+            {"$sort": {sort_field: order}},
         ]
 
         cursor = self.collection.aggregate(pipeline)

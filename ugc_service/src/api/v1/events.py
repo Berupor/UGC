@@ -25,7 +25,7 @@ async def viewpoint_film(
     request: Request,
     service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
-) -> Tuple[str, int]:
+):
     """Обработка полученных данных о событии.
     Args:
         movie_id: Id текущего фильма.
@@ -37,4 +37,4 @@ async def viewpoint_film(
         user_id: Id пользователя
     """
     await service.produce(key=f"{user_id}&{movie_id}", topic_name="views", data=event)
-    return HTTPStatus.OK.phrase, 200
+    return HTTPStatus.CREATED

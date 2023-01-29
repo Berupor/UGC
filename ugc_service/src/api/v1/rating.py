@@ -1,8 +1,7 @@
 from http import HTTPStatus
 from typing import Dict, List, Type
 
-from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, Path, Request
+from fastapi import APIRouter, Depends, HTTPException, Path
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
@@ -36,7 +35,6 @@ async def add_movie_rating(
     movie_id: str,
     event_service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
-    rating_service: RatingService = Depends(get_rating_service),
 ):
     """Processing getting event data.
     Args:
@@ -51,7 +49,6 @@ async def add_movie_rating(
     event.user_id = str(user_id)
     event.movie_id = movie_id
 
-    await rating_service.insert_one(event.dict())
     await event_service.produce(key=movie_id, topic_name="rating", data=event)
     return HTTPStatus.CREATED
 
@@ -87,19 +84,19 @@ async def add_review_rating(
     review_id: PyObjectId = Path(..., alias="review_id"),
     event_service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
-    rating_service: RatingService = Depends(get_rating_service),
 ):
     event.user_id = str(user_id)
     event.review_id = review_id
 
-    await rating_service.insert_one(event.dict())
     await event_service.produce(key=str(review_id), topic_name="rating", data=event)
     return HTTPStatus.CREATED
 
 
 @router.get("/review/{review_id}")
 @exception_handler
-async def get_all_review_ratings(review_id: PyObjectId = Path(..., alias="review_id")) -> List[Rating]:
+async def get_all_review_ratings(
+    review_id: PyObjectId = Path(..., alias="review_id")
+) -> List[Rating]:
     return await get_ratings({"review_id": review_id}, ReviewRating)
 
 
