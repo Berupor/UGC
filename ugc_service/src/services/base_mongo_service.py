@@ -1,21 +1,21 @@
+from typing import AsyncGenerator, Dict
+
+from motor.motor_asyncio import AsyncIOMotorClient  # type: ignore
+
 from core.config import settings
-from motor.motor_asyncio import AsyncIOMotorClient
-from typing import AsyncGenerator,Dict
 
 
 class BaseMongoService:
     def __init__(
-            self,
-            db_name,
-            collection_name,
-            host=settings.mongo.host,
-            port=settings.mongo.port,
+        self,
+        db_name,
+        collection_name,
+        host=settings.mongo.host,
+        port=settings.mongo.port,
     ):
         self.db_name = db_name
         self.collection_name = collection_name
-        self.client = AsyncIOMotorClient(
-            f"mongodb://{host}:{port}/"
-        )
+        self.client = AsyncIOMotorClient(f"mongodb://{host}:{port}/")
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 

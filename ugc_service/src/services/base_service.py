@@ -1,22 +1,24 @@
 from json import loads
+from typing import Any, AsyncGenerator, Dict, Union
 
 from fastapi import Depends
+from pydantic import BaseModel
 
 from event_streamer.kafka_streamer import KafkaClient, get_kafka
-from typing import Dict, Union, Any, AsyncGenerator
-from pydantic import BaseModel
 
 
 class EventService:
     def __init__(self, kafka: KafkaClient):
         self.kafka_client = kafka
 
-    async def produce(self, key: str, topic_name: str, data: Union[Dict, BaseModel]) -> None:
+    async def produce(
+        self, key: str, topic_name: str, data: Union[Dict, BaseModel]
+    ) -> None:
         if type(data) != dict:
             data = data.json()  # type: ignore
 
         await self.kafka_client.produce_message(
-            key=str.encode(key), topic=topic_name, value=loads(data)
+            key=str.encode(key), topic=topic_name, value=loads(data)  # type: ignore
         )
 
     async def consume(self, topic: str, group_id=None) -> AsyncGenerator:
