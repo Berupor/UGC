@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Generator
 import os
 from http import HTTPStatus
 
@@ -11,7 +12,7 @@ from core.config import settings
 logging.basicConfig(level=logging.INFO)
 
 
-def read_properties_files(path: str) -> dict:
+def read_properties_files(path: str) -> Generator:
     for file_connect in os.listdir(path):
         with open(os.path.join(path, file_connect)) as fs:
             yield json.load(fs), file_connect
@@ -37,7 +38,9 @@ async def request_connect(http_client: aiohttp.ClientSession, json_connect: dict
 
 async def init_connections():
     http_client = aiohttp.ClientSession()
-    for json_connect, file_connect in read_properties_files(r"./event_streamer/connect/connections"):
+    for json_connect, file_connect in read_properties_files(
+        r"./event_streamer/connect/connections"
+    ):
         response = await request_connect(http_client, json_connect)
         logging.info(f"status: {response.status}")
         if HTTPStatus.CREATED != response.status:

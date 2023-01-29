@@ -8,8 +8,8 @@ class Rating(BaseMongoModel):
 
 
 class MovieRating(Rating):
-    movie_id: str = None
+    movie_id: str = ""
 
 
 class ReviewRating(Rating):
-    review_id: str = None
+    review_id: str = ""

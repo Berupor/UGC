@@ -5,13 +5,11 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 
-from api.v1 import events, rating, bookmarks, review
-from api.v1.decorators import exception_handler
+from api.v1 import bookmarks, events, rating, review
+from api.v1.utils.decorators import exception_handler
 from core import exceptions
 from core.config import settings
-from db.clickhouse.migrator import init_ch
 from event_streamer.kafka_streamer import kafka_client
-from event_streamer.connect.create_connections import init_connections
 
 app = FastAPI(
     title="API для получения и обработки данных пользовательского поведения",
@@ -61,8 +59,5 @@ app.include_router(rating.router, prefix="/api/v1/rating", tags=["Rating"])
 app.include_router(bookmarks.router, prefix="/api/v1/bookmarks", tags=["Bookmarks"])
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
-        host=settings.fastapi.host,
-        port=settings.fastapi.port,
-        reload=True
+        "main:app", host=settings.fastapi.host, port=settings.fastapi.port, reload=True
     )

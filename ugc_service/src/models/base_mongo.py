@@ -1,6 +1,6 @@
 from bson import ObjectId
-from pydantic import Extra, Field as PydanticField
-from uuid import UUID
+from pydantic import Field as PydanticField
+
 from models.base import BaseEventModel
 
 
@@ -22,7 +22,7 @@ class PyObjectId(ObjectId):
 
 class BaseMongoModel(BaseEventModel):
     id: PyObjectId = PydanticField(default_factory=PyObjectId, alias="_id")
-    author_id: str = None
+    user_id: str = ""
 
     class Config:
         allow_population_by_field_name = True
