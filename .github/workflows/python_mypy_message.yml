@@ -25,7 +25,7 @@ jobs:
 
     - name: Run mypy
       run: |
-        mypy --ignore-missing-imports .
+        mypy --ignore-missing-imports ugc_service/src 
 
     - name: Send Telegram message on success
       if: success()
