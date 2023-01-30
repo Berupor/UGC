@@ -71,8 +71,7 @@ async def delete_movie_rating(
     )
     if result:
         return HTTPStatus.NO_CONTENT
-    else:
-        raise HTTPException(status_code=404, detail="Rating not found")
+    raise HTTPException(status_code=404, detail="Rating not found")
 
 
 @router.post(
@@ -114,5 +113,4 @@ async def delete_review_rating(
     )
     if result:
         return HTTPStatus.NO_CONTENT
-    else:
-        raise HTTPException(status_code=404, detail="Rating not found")
+    raise HTTPException(status_code=404, detail="Rating not found")

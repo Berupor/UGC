@@ -64,5 +64,4 @@ async def delete_bookmark(
     result = await bookmark_service.delete_one({"_id": bookmark_id, "user_id": user_id})
     if result:
         return HTTPStatus.NO_CONTENT
-    else:
-        raise HTTPException(status_code=404, detail="Review not found")
+    raise HTTPException(status_code=404, detail="Review not found")

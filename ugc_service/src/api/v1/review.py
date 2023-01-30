@@ -2,7 +2,7 @@ from http import HTTPStatus
 from typing import List
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
@@ -57,5 +57,4 @@ async def delete_review(
     )
     if result:
         return HTTPStatus.NO_CONTENT
-    else:
-        raise HTTPException(status_code=404, detail="Review not found")
+    raise HTTPException(status_code=404, detail="Review not found")
