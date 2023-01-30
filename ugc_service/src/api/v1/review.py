@@ -1,73 +1,60 @@
-from fastapi import APIRouter, Depends, HTTPException
-from services.review_service import get_review_service, ReviewService
+from http import HTTPStatus
+from typing import List
+
+from bson import ObjectId
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+
+from api.v1.utils.auth_bearer import JWTBearer
+from api.v1.utils.decorators import exception_handler
+from models.review import FullReview, ShortReview
+from models.user import User
 from services.base_service import EventService, get_event_service
-from pydantic import BaseModel
-from bson.objectid import ObjectId
+from services.review_service import ReviewService, get_review_service
 
 router = APIRouter()
 
 
-class ShortReview(BaseModel):
-    text: str
-    author: str
-    publication_date: str
-
-
-class FullReview(ShortReview):
-    movie_id: str
-
-
 @router.post("/{movie_id}")
+@exception_handler
 async def add_review(
         movie_id: str,
-        review: ShortReview,
-        review_service: ReviewService = Depends(get_review_service),
+        event: ShortReview,
         event_service: EventService = Depends(get_event_service),
+        user_id: User = Depends(JWTBearer()),
 ):
-    review_document = review.dict()
-    review_document["movie_id"] = movie_id
+    event.movie_id = movie_id
+    event.user_id = str(user_id)
 
-    await review_service.insert_one(review_document)
+    await event_service.produce(key=movie_id, topic_name="reviews", data=event)
 
-    # await event_service.produce(key=movie_id, topic_name="reviews", model=review_document)
-
-    return {"message": "Review added successfully."}
+    return HTTPStatus.CREATED
 
 
 @router.get("/{movie_id}")
+@exception_handler
 async def get_all_reviews(
-        movie_id: str, review_service: ReviewService = Depends(get_review_service)
-):
-    reviews = review_service.find({"movie_id": movie_id})
-
+        movie_id: str,
+        sort: str = Query(default="likes", alias="sort"),
+        review_service: ReviewService = Depends(get_review_service),
+) -> List[FullReview]:
+    reviews = review_service.find(
+        {"movie_id": movie_id},
+        sort_field=sort[1:],
+        order=-1 if sort.startswith("-") else 1,
+    )
     return [FullReview(**review) async for review in reviews]
 
 
-@router.put("/{review_id}")
-async def update_review(
+@router.delete("/{review_id}")
+@exception_handler
+async def delete_review(
         review_id: str,
-        review: ShortReview,
         review_service: ReviewService = Depends(get_review_service),
+        user_id: User = Depends(JWTBearer()),
 ):
-    review_id = ObjectId(review_id)
-
-    result = await review_service.update_one(
-        {"_id": review_id}, {"$set": review.dict()}
+    result = await review_service.delete_one(
+        {"_id": ObjectId(review_id), "user_id": user_id}
     )
     if result:
-        return {"message": "Review updated successfully"}
-    else:
-        raise HTTPException(status_code=404, detail="Review not found")
-
-
-@router.delete("/{review_id}")
-async def delete_review(
-        review_id: str, review_service: ReviewService = Depends(get_review_service)
-):
-    review_id = ObjectId(review_id)
-
-    result = await review_service.delete_one({"_id": review_id})
-    if result:
-        return {"message": "Review deleted successfully"}
-    else:
-        raise HTTPException(status_code=404, detail="Review not found")
+        return HTTPStatus.NO_CONTENT
+    raise HTTPException(status_code=404, detail="Review not found")

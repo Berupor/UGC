@@ -1,26 +1,25 @@
+from typing import AsyncGenerator, Dict
+
+from motor.motor_asyncio import AsyncIOMotorClient  # type: ignore
+
 from core.config import settings
-from motor.motor_asyncio import AsyncIOMotorClient
 
 
 class BaseMongoService:
     def __init__(
-            self,
-            db_name,
-            collection_name,
-            host=settings.mongo.host,
-            port=settings.mongo.port,
-            username=settings.mongo.username,
-            password=settings.mongo.password,
+        self,
+        db_name,
+        collection_name,
+        host=settings.mongo.host,
+        port=settings.mongo.port,
     ):
         self.db_name = db_name
         self.collection_name = collection_name
-        self.client = AsyncIOMotorClient(
-            f"mongodb://{username}:{password}@{host}:{port}/"
-        )
+        self.client = AsyncIOMotorClient(f"mongodb://{host}:{port}/")
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
-    async def insert_one(self, document):
+    async def insert_one(self, document: Dict):
         """Insert a single document into the collection"""
         result = await self.collection.insert_one(document)
         return result.inserted_id
@@ -35,7 +34,7 @@ class BaseMongoService:
         document = await self.collection.find_one(query)
         return document
 
-    async def find(self, query):
+    async def find(self, query, sort_field="", order="") -> AsyncGenerator:
         """Find all documents that match the query"""
         cursor = self.collection.find(query)
         async for document in cursor:

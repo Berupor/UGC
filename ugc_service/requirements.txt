@@ -1,3 +1,5 @@
+pymongo==4.3.3
+
 aiokafka==0.8.0
 mypy==0.991
 pytest
@@ -29,3 +31,4 @@ watchfiles==0.18.1
 websockets==10.4
 orjson==3.8.5
 python-telegram-bot==20.0
+motor==3.1.1
