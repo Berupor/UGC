@@ -26,7 +26,7 @@ async def add_review(
     event.user_id = str(user_id)
     event.movie_id = movie_id
 
-    await review_service.insert_one(event.dict())
+    # await review_service.insert_one(event.dict())
     await event_service.produce(key=movie_id, topic_name="reviews", data=event)
 
     return HTTPStatus.CREATED

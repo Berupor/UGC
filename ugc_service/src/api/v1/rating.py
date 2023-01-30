@@ -88,7 +88,7 @@ async def add_review_rating(
     event.user_id = str(user_id)
     event.review_id = review_id
 
-    await rating_service.insert_one(event.dict())
+    # await rating_service.insert_one(event.dict())
     await event_service.produce(key=str(review_id), topic_name="rating", data=event)
     return HTTPStatus.CREATED
 

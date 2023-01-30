@@ -38,7 +38,7 @@ async def add_bookmark(
     event.user_id = str(user_id)
     event.movie_id = movie_id
 
-    await bookmark_service.insert_one(event.dict())
+    # await bookmark_service.insert_one(event.dict())
     await service.produce(key=movie_id, topic_name="bookmarks", data=event)
     return HTTPStatus.CREATED
 

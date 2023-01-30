@@ -39,6 +39,10 @@ class MongoSettings(BaseSettings):
     username: str
     password: str
 
+class Logstash(BaseSettings):
+    host: str
+    port: int
+
 
 class Settings(BaseSettings):
     token_algo: str
@@ -48,6 +52,7 @@ class Settings(BaseSettings):
     kafka: KafkaSettings
     connect: ConnectSettings
     clickhouse: ClickHouseSettings
+    logstash: Logstash
 
     class Config:
         #  For local development outside of docker

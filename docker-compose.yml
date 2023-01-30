@@ -21,8 +21,6 @@ services:
     restart: always
     expose:
       - "2181"
-#    volumes:
-#      - ./confluent/zookeeper/data:/var/lib/zookeeper/data
     networks:
       - zookeeper
     environment:
@@ -42,39 +40,23 @@ services:
     env_file:
       - ./.env.prod
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop:latest
-    container_name: kafdrop
-    expose:
-      - "9008"
-    ports:
-      - "9008:9000"
-    networks:
-      - kafdrop
-    depends_on:
-      - broker
-    environment:
-      - KAFKA_BROKERCONNECT=broker:29092
-
   broker:
     image: confluentinc/cp-kafka:7.1.2
     hostname: broker
     container_name: broker
     depends_on:
       - zookeeper
-    ports:
-      - "29092:29092"
-      - "9092:9092"
-      - "9192:9192"
-#    volumes:
-#      - ./confluent/kafka/data:/var/lib/kafka/data
+    expose:
+      - "29092"
+      - "9092"
+      - "9192"
     networks:
       - broker
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://broker:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -92,8 +74,8 @@ services:
       - broker
     networks:
       - schema-registry
-    ports:
-      - "8081:8081"
+    expose:
+      - "8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
@@ -110,9 +92,9 @@ services:
       - connect
     volumes:
       - ./confluent/connect/jars:/usr/share/java/confluent_hub_components
-    ports:
-      - "8083:8083"
-      - "9102:9102"
+    expose:
+      - "8083"
+      - "9102"
     environment:
       CONNECT_BOOTSTRAP_SERVERS: 'broker:29092'
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
@@ -156,8 +138,55 @@ services:
     depends_on:
       - broker
       - connect
-    ports:
-      - 27017:27017
+    expose:
+      - "27017"
+  filebeat:
+    image: elastic/filebeat:7.17.5
+    command: filebeat -e -strict.perms=false
+    networks:
+      - filebeat
+    volumes:
+      - /tmp/logs/nginx:/var/log/nginx:ro
+      - ./loggin_service/deploy/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    depends_on:
+      - ugc
+      - nginx
+      
+  logstash:
+      image: logstash:7.10.1
+      networks:
+        - logstash
+      depends_on:
+        - elasticsearch
+      environment:
+        XPACK_MONITORING_ENABLED: "false"
+        ES_HOST: "elasticsearch:9200"
+      expose:
+        - "5044"
+      volumes:
+        - ./loggin_service/deploy/logstash.conf:/config/logstash.conf:ro
+      command: logstash -f /config/logstash.conf
+
+  elasticsearch:
+    image: elastic/elasticsearch:7.17.6
+    networks:
+      - elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+      - discovery.type=single-node
+    expose:
+      - "9200"
+    volumes:
+      - /tmp/esdata:/tmp/elasticsearch/data
+
+  kibana:
+      image: elastic/kibana:7.17.6
+      networks:
+        - kibana
+      ports:
+        - "5601:5601"
+      depends_on:
+        - elasticsearch
 
 
 networks:
@@ -166,8 +195,6 @@ networks:
   ugc:
     name: ugc_net
   zookeeper:
-    name: ugc_net
-  kafdrop:
     name: ugc_net
   broker:
     name: ugc_net
@@ -178,4 +205,12 @@ networks:
   clickhouse:
     name: ugc_net
   mongodb:
+    name: ugc_net
+  filebeat:
+    name: ugc_net
+  logstash:
+    name: ugc_net
+  elasticsearch:
+    name: ugc_net
+  kibana:
     name: ugc_net
