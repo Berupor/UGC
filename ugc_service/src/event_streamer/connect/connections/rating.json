@@ -13,7 +13,7 @@
     "max.num.retries": "5",
     "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneDefaultStrategy",
     "value.projection.type": "whitelist",
-    "value.projection.list": "id",
+    "value.projection.list": "user_id",
     "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.PartialValueStrategy",
     "document.id.strategy.overwrite.existing": "true",
     "mongo.errors.tolerance": "all",

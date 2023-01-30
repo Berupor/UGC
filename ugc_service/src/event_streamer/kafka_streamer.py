@@ -91,7 +91,7 @@ class KafkaClient:
 
 
 kafka_client: KafkaClient = KafkaClient(
-    bootstrap_servers=['broker']
+    bootstrap_servers=f"{settings.kafka.host}:{settings.kafka.port}"
 )
 
 

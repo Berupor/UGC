@@ -59,15 +59,15 @@ async def get_all_movie_ratings(movie_id: str) -> List[Rating]:
     return await get_ratings({"movie_id": movie_id}, MovieRating)
 
 
-@router.delete("/movie/{rating_id}")
+@router.delete("/movie/{movie_id}")
 @exception_handler
 async def delete_movie_rating(
-    rating_id: PyObjectId = Path(..., alias="rating_id"),
+    movie_id: str,
     rating_service: RatingService = Depends(get_rating_service),
     user_id: User = Depends(JWTBearer()),
 ):
     result = await rating_service.delete_one(
-        {"_id": rating_id, "user_id": str(user_id)}
+        {"movie_id": movie_id, "user_id": str(user_id)}
     )
     if result:
         return HTTPStatus.NO_CONTENT
@@ -109,7 +109,7 @@ async def delete_review_rating(
     user_id: User = Depends(JWTBearer()),
 ):
     result = await rating_service.delete_one(
-        {"_id": rating_id, "user_id": str(user_id)}
+        {"id": rating_id, "user_id": str(user_id)}
     )
     if result:
         return HTTPStatus.NO_CONTENT

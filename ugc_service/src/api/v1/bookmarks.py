@@ -48,10 +48,10 @@ async def add_bookmark(
 async def get_all_bookmarks(
         bookmark_service: BookmarksService = Depends(get_bookmarks_service),
         user_id: User = Depends(JWTBearer()),
-) -> List[Bookmark]:
+) -> List[dict]:
     bookmarks = bookmark_service.find({"user_id": user_id})
 
-    return [Bookmark(**bookmark) async for bookmark in bookmarks]
+    return [bookmark async for bookmark in bookmarks]
 
 
 @router.delete("/{bookmark_id}")
@@ -61,7 +61,7 @@ async def delete_bookmark(
         bookmark_service: BookmarksService = Depends(get_bookmarks_service),
         user_id: User = Depends(JWTBearer()),
 ):
-    result = await bookmark_service.delete_one({"_id": bookmark_id, "user_id": user_id})
+    result = await bookmark_service.delete_one({"id": bookmark_id, "user_id": user_id})
     if result:
         return HTTPStatus.NO_CONTENT
     raise HTTPException(status_code=404, detail="Review not found")

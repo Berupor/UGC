@@ -38,11 +38,11 @@ async def get_all_reviews(
         movie_id: str,
         sort: str = Query(default="likes", alias="sort"),
         review_service: ReviewService = Depends(get_review_service),
-) -> List[FullReview]:
+) -> List[dict]:
     reviews = review_service.find(
         {"movie_id": movie_id}, sort_field=sort[1:], order=-1 if sort.startswith("-") else 1
     )
-    return [FullReview(**review) async for review in reviews]
+    return [review async for review in reviews]
 
 
 @router.delete("/{review_id}")
@@ -53,7 +53,7 @@ async def delete_review(
         user_id: User = Depends(JWTBearer()),
 ):
     result = await review_service.delete_one(
-        {"_id": ObjectId(review_id), "user_id": user_id}
+        {"id": ObjectId(review_id), "user_id": user_id}
     )
     if result:
         return HTTPStatus.NO_CONTENT
