@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
+from event_streamer.connect.create_connections import init_connections
 
 from api.v1 import bookmarks, events, rating, review
 from api.v1.utils.decorators import exception_handler
@@ -40,7 +41,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.on_event("startup")
 async def startup():
-    # await init_connections()
+    await init_connections()
     # init_ch()
     logging.info("initialized connection.")
 

@@ -19,11 +19,10 @@ router = APIRouter()
 )
 @exception_handler
 async def add_bookmark(
-        event: Bookmark,
-        movie_id: str,
-        service: EventService = Depends(get_event_service),
-        user_id: User = Depends(JWTBearer()),
-        bookmark_service: BookmarksService = Depends(get_bookmarks_service)
+    event: Bookmark,
+    movie_id: str,
+    service: EventService = Depends(get_event_service),
+    user_id: User = Depends(JWTBearer()),
 ):
     """Processing received event data.
     Args:
@@ -38,7 +37,6 @@ async def add_bookmark(
     event.user_id = str(user_id)
     event.movie_id = movie_id
 
-    await bookmark_service.insert_one(event.dict())
     await service.produce(key=movie_id, topic_name="bookmarks", data=event)
     return HTTPStatus.CREATED
 
@@ -46,8 +44,8 @@ async def add_bookmark(
 @router.get("/")
 @exception_handler
 async def get_all_bookmarks(
-        bookmark_service: BookmarksService = Depends(get_bookmarks_service),
-        user_id: User = Depends(JWTBearer()),
+    bookmark_service: BookmarksService = Depends(get_bookmarks_service),
+    user_id: User = Depends(JWTBearer()),
 ) -> List[Bookmark]:
     bookmarks = bookmark_service.find({"user_id": user_id})
 
@@ -57,11 +55,12 @@ async def get_all_bookmarks(
 @router.delete("/{bookmark_id}")
 @exception_handler
 async def delete_bookmark(
-        bookmark_id: PyObjectId = Path(..., alias="bookmark_id"),
-        bookmark_service: BookmarksService = Depends(get_bookmarks_service),
-        user_id: User = Depends(JWTBearer()),
+    bookmark_id: PyObjectId = Path(..., alias="bookmark_id"),
+    bookmark_service: BookmarksService = Depends(get_bookmarks_service),
+    user_id: User = Depends(JWTBearer()),
 ):
     result = await bookmark_service.delete_one({"_id": bookmark_id, "user_id": user_id})
     if result:
         return HTTPStatus.NO_CONTENT
-    raise HTTPException(status_code=404, detail="Review not found")
+
+    raise HTTPException(status_code=404, detail="Item not found")

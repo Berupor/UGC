@@ -4,5 +4,5 @@ from models.base_mongo import BaseMongoModel
 
 
 class Bookmark(BaseMongoModel):
-    movie_id: str
+    movie_id: str = ""
     status: bool = Field(default=True)

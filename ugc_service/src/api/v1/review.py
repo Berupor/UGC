@@ -17,16 +17,14 @@ router = APIRouter()
 @router.post("/{movie_id}")
 @exception_handler
 async def add_review(
-        movie_id: str,
-        event: ShortReview,
-        event_service: EventService = Depends(get_event_service),
-        review_service: ReviewService = Depends(get_review_service),
-        user_id: User = Depends(JWTBearer()),
+    movie_id: str,
+    event: ShortReview,
+    event_service: EventService = Depends(get_event_service),
+    user_id: User = Depends(JWTBearer()),
 ):
     event.user_id = str(user_id)
     event.movie_id = movie_id
 
-    await review_service.insert_one(event.dict())
     await event_service.produce(key=movie_id, topic_name="reviews", data=event)
 
     return HTTPStatus.CREATED
@@ -35,12 +33,14 @@ async def add_review(
 @router.get("/{movie_id}")
 @exception_handler
 async def get_all_reviews(
-        movie_id: str,
-        sort: str = Query(default="likes", alias="sort"),
-        review_service: ReviewService = Depends(get_review_service),
+    movie_id: str,
+    sort: str = Query(default="likes", alias="sort"),
+    review_service: ReviewService = Depends(get_review_service),
 ) -> List[FullReview]:
     reviews = review_service.find(
-        {"movie_id": movie_id}, sort_field=sort[1:], order=-1 if sort.startswith("-") else 1
+        {"movie_id": movie_id},
+        sort_field=sort[1:],
+        order=-1 if sort.startswith("-") else 1,
     )
     return [FullReview(**review) async for review in reviews]
 
@@ -48,9 +48,9 @@ async def get_all_reviews(
 @router.delete("/{review_id}")
 @exception_handler
 async def delete_review(
-        review_id: str,
-        review_service: ReviewService = Depends(get_review_service),
-        user_id: User = Depends(JWTBearer()),
+    review_id: str,
+    review_service: ReviewService = Depends(get_review_service),
+    user_id: User = Depends(JWTBearer()),
 ):
     result = await review_service.delete_one(
         {"_id": ObjectId(review_id), "user_id": user_id}
