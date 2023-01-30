@@ -72,6 +72,7 @@ services:
       - broker
     environment:
       KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: broker
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
@@ -81,7 +82,6 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
-      KAFKA_ADVERTISED_HOST_NAME: broker
       ALLOW_PLAINTEXT_LISTENER: yes
 
   schema-registry:
@@ -133,19 +133,19 @@ services:
       KAFKA_JMX_PORT: 9102
       KAFKA_JMX_HOSTNAME: localhost
 
-  clickhouse-node1:
-    image: yandex/clickhouse-server:21.7.4
-    container_name: clickhouse-node1
-    hostname: clickhouse-node1
-    expose:
-      - "8123"
-      - "9000"
-    networks:
-      - clickhouse
-    volumes:
-      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
-    depends_on:
-      - zookeeper
+#  clickhouse-node1:
+#    image: yandex/clickhouse-server:21.7.4
+#    container_name: clickhouse-node1
+#    hostname: clickhouse-node1
+#    expose:
+#      - "8123"
+#      - "9000"
+#    networks:
+#      - clickhouse
+#    volumes:
+#      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
+#    depends_on:
+#      - zookeeper
 
   mongodb:
     image: mongo:4.2-rc-bionic
@@ -175,7 +175,7 @@ networks:
     name: ugc_net
   connect:
     name: ugc_net
-  clickhouse:
-    name: ugc_net
+#  clickhouse:
+#    name: ugc_net
   mongodb:
     name: ugc_net

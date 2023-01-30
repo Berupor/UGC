@@ -1,9 +1,7 @@
 from typing import AsyncGenerator
 
-from fastapi import Depends
-
 from .base_mongo_service import BaseMongoService
-from .rating_service import RatingService, get_rating_service
+from .rating_service import get_rating_service
 
 
 class ReviewService(BaseMongoService):
@@ -20,17 +18,31 @@ class ReviewService(BaseMongoService):
                     "from": "rating",
                     "localField": "_id",
                     "foreignField": "review_id",
-                    "as": "likes",
+                    "as": "rating",
                 }
             },
             {
-                "$group": {
-                    "_id": "$_id",
-                    "created_at": {"$first": "$created_at"},
-                    "user_id": {"$first": "$user_id"},
-                    "text": {"$first": "$text"},
-                    "movie_id": {"$first": "$movie_id"},
-                    "likes": {"$sum": {"$size": "$likes"}},
+                "$addFields": {
+                    "likes": {
+                        "$filter": {
+                            "input": "$rating",
+                            "as": "rating",
+                            "cond": {"$eq": ["$$rating.rating", 10]},
+                        }
+                    },
+                    "dislikes": {
+                        "$filter": {
+                            "input": "$rating",
+                            "as": "rating",
+                            "cond": {"$eq": ["$$rating.rating", 0]},
+                        }
+                    },
+                }
+            },
+            {
+                "$addFields": {
+                    "likes": {"$size": "$likes"},
+                    "dislikes": {"$size": "$dislikes"},
                 }
             },
             {"$sort": {sort_field: order}},

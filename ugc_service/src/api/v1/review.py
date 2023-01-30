@@ -40,7 +40,7 @@ async def get_all_reviews(
     review_service: ReviewService = Depends(get_review_service),
 ) -> List[FullReview]:
     reviews = review_service.find(
-        {"movie_id": movie_id}, sort_field=sort, order=-1 if sort.startswith("-") else 1
+        {"movie_id": movie_id}, sort_field=sort[1:], order=-1 if sort.startswith("-") else 1
     )
     return [FullReview(**review) async for review in reviews]
 

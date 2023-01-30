@@ -83,11 +83,13 @@ async def add_review_rating(
     event: ReviewRating,
     review_id: PyObjectId = Path(..., alias="review_id"),
     event_service: EventService = Depends(get_event_service),
+    rating_service: RatingService = Depends(get_rating_service),
     user_id: User = Depends(JWTBearer()),
 ):
     event.user_id = str(user_id)
     event.review_id = review_id
 
+    await rating_service.insert_one(event.dict())
     await event_service.produce(key=str(review_id), topic_name="rating", data=event)
     return HTTPStatus.CREATED
 
