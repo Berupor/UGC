@@ -1,10 +1,9 @@
 import asyncio
 import json
+from typing import AsyncGenerator
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer  # type: ignore
-
 from core.config import settings
-from typing import AsyncGenerator
 
 
 class KafkaClient:
@@ -78,11 +77,7 @@ class KafkaClient:
             topic, value, key, partition, timestamp_ms, headers
         )
 
-    async def consume_messages(
-        self,
-        topic,
-        group_id=None,
-    ) -> AsyncGenerator:
+    async def consume_messages(self, topic, group_id=None,) -> AsyncGenerator:
         if not self.consumer:
             await self._start_consumer(topic, group_id)
 

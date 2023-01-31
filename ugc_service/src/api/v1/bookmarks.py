@@ -1,13 +1,11 @@
 from http import HTTPStatus
-
-from fastapi import APIRouter, Depends, HTTPException, Path
+from typing import Tuple
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
-from models.base_mongo import PyObjectId
+from fastapi import APIRouter, Depends, HTTPException, Request
 from models.bookmarks import Bookmark
 from models.user import User
-from typing import List
 from services.base_service import EventService, get_event_service
 from services.bookmarks_service import BookmarksService, get_bookmarks_service
 
@@ -16,11 +14,15 @@ router = APIRouter()
 
 @router.post(
     "/{movie_id}",
+    summary="Закладки пользователя",
+    description="",
+    response_description="",
 )
 @exception_handler
-async def add_bookmark(
+async def bookmarks(
     event: Bookmark,
-    movie_id: str,
+    movie_id,
+    request: Request,
     service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
 ):
@@ -38,29 +40,29 @@ async def add_bookmark(
     event.movie_id = movie_id
 
     await service.produce(key=movie_id, topic_name="bookmarks", data=event)
+
     return HTTPStatus.CREATED
 
 
-@router.get("/")
-@exception_handler
+@router.get("")
 async def get_all_bookmarks(
-    bookmark_service: BookmarksService = Depends(get_bookmarks_service),
     user_id: User = Depends(JWTBearer()),
-) -> List[Bookmark]:
-    bookmarks = bookmark_service.find({"user_id": user_id})
+    bookmarks_service: BookmarksService = Depends(get_bookmarks_service),
+) -> list[dict]:
+    bookmarks = bookmarks_service.find({"user_id": user_id})
+    return [bookmark async for bookmark in bookmarks]
 
-    return [Bookmark(**bookmark) async for bookmark in bookmarks]
 
-
-@router.delete("/{bookmark_id}")
-@exception_handler
-async def delete_bookmark(
-    bookmark_id: PyObjectId = Path(..., alias="bookmark_id"),
-    bookmark_service: BookmarksService = Depends(get_bookmarks_service),
+@router.delete("/{movie_id}")
+async def delete_movie_rating(
+    movie_id: str,
+    bookmarks_service: BookmarksService = Depends(get_bookmarks_service),
     user_id: User = Depends(JWTBearer()),
 ):
-    result = await bookmark_service.delete_one({"_id": bookmark_id, "user_id": user_id})
+    result = await bookmarks_service.delete_one(
+        {"movie_id": movie_id, "user_id": user_id}
+    )
     if result:
         return HTTPStatus.NO_CONTENT
-
-    raise HTTPException(status_code=404, detail="Item not found")
+    else:
+        raise HTTPException(status_code=404, detail="Rating not found")

@@ -1,12 +1,11 @@
 import json
 import logging
-from typing import Generator
 import os
+from typing import Generator
 from http import HTTPStatus
 
 import aiohttp
 import backoff
-
 from core.config import settings
 
 logging.basicConfig(level=logging.INFO)
@@ -39,7 +38,7 @@ async def request_connect(http_client: aiohttp.ClientSession, json_connect: dict
 async def init_connections():
     http_client = aiohttp.ClientSession()
     for json_connect, file_connect in read_properties_files(
-        r"./event_streamer/connect/connections"
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "connections")
     ):
         response = await request_connect(http_client, json_connect)
         logging.info(f"status: {response.status}")

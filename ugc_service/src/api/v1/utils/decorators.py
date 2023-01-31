@@ -1,9 +1,8 @@
 from functools import wraps
 from http import HTTPStatus
 
-from fastapi.responses import JSONResponse
-
 from core import exceptions
+from fastapi.responses import JSONResponse
 
 
 def exception_handler(func):

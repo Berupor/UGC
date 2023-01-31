@@ -27,6 +27,9 @@ class KafkaSettings(BaseSettings):
     port: int
     topic: str
 
+class ConnectSettings(BaseSettings):
+    host: str
+    port: int
 
 class MongoSettings(BaseSettings):
     host: str
@@ -35,7 +38,7 @@ class MongoSettings(BaseSettings):
     password: str
 
 
-class ConnectSettings(BaseSettings):
+class Logstash(BaseSettings):
     host: str
     port: int
 
@@ -48,6 +51,7 @@ class Settings(BaseSettings):
     mongo: MongoSettings
     kafka: KafkaSettings
     clickhouse: ClickHouseSettings
+    logstash: Logstash
 
     class Config:
         #  For local development outside of docker
