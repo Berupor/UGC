@@ -50,7 +50,6 @@ async def get_all_bookmarks(
     bookmarks_service: BookmarksService = Depends(get_bookmarks_service),
 ) -> list[dict]:
     bookmarks = bookmarks_service.find({"user_id": user_id})
-
     return [bookmark async for bookmark in bookmarks]
 
 

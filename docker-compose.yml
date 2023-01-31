@@ -33,8 +33,6 @@ services:
     restart: always
     expose:
       - "8000"
-    depends_on:
-      - connect
     networks:
       - ugc
     env_file:
@@ -42,7 +40,6 @@ services:
 
   broker:
     image: confluentinc/cp-kafka:7.1.2
-    hostname: broker
     container_name: broker
     depends_on:
       - zookeeper
@@ -129,12 +126,14 @@ services:
     depends_on:
       - zookeeper
 
-  mongodb:
-    image: mongo:4.2-rc-bionic
-    hostname: mongodb
-    container_name: mongodb
+  clickhouse-node2:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node2
+    hostname: clickhouse-node2
     networks:
-      - mongodb
+      - clickhouse
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node2:/etc/clickhouse-server
     depends_on:
       - broker
       - connect
@@ -189,7 +188,6 @@ services:
       depends_on:
         - elasticsearch
 
-
 networks:
   nginx:
     name: ugc_net
@@ -198,10 +196,6 @@ networks:
   zookeeper:
     name: ugc_net
   broker:
-    name: ugc_net
-  schema-registry:
-    name: ugc_net
-  connect:
     name: ugc_net
   clickhouse:
     name: ugc_net

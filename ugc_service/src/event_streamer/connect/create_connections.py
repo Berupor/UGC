@@ -27,7 +27,7 @@ def read_properties_files(path: str) -> dict:
 )
 async def request_connect(http_client: aiohttp.ClientSession, json_connect: dict):
     response = await http_client.post(
-        url=f"http://{settings.connect.host}:{settings.connect.port}/connectors",
+        url=f"http://{settings.connect.host}:{settings.connect.port}/connectors",  # type: ignore
         headers={"Content-Type": "application/json"},
         data=json.dumps(json_connect),
     )

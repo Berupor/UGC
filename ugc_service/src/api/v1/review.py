@@ -20,8 +20,8 @@ async def add_review(
     event_service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
 ):
-    event.user_id = str(user_id)
     event.movie_id = movie_id
+    event.user_id = str(user_id)
 
     await event_service.produce(key=movie_id, topic_name="reviews", data=event)
 

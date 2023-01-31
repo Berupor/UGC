@@ -62,7 +62,7 @@ async def shutdown():
     logging.info("closed redis connection.")
 
 
-app.include_router(events.router, prefix="/api/v1/events", tags=["Events"])
+app.include_router(events.router, prefix="/api/v1/events", tags=["Запись событий"])
 app.include_router(review.router, prefix="/api/v1/reviews", tags=["Review"])
 app.include_router(rating.router, prefix="/api/v1/rating", tags=["Rating"])
 app.include_router(bookmarks.router, prefix="/api/v1/bookmarks", tags=["Bookmarks"])

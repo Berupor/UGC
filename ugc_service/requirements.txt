@@ -28,11 +28,6 @@ uvicorn==0.20.0
 watchfiles==0.18.1
 websockets==10.4
 orjson==3.8.5
-aiohttp==3.8.3
-backoff==2.2.1
-
-wemake-python-styleguide==0.17.0
-flake8-html==0.4.3
 python-telegram-bot==20.0
 motor==3.1.1
 pymongo==4.3.3
