@@ -1,8 +1,7 @@
 from typing import AsyncGenerator, Dict
 
-from motor.motor_asyncio import AsyncIOMotorClient  # type: ignore
-
 from core.config import settings
+from motor.motor_asyncio import AsyncIOMotorClient  # type: ignore
 
 
 class BaseMongoService:
@@ -36,7 +35,7 @@ class BaseMongoService:
 
     async def find(self, query, sort_field="", order="") -> AsyncGenerator:
         """Find all documents that match the query"""
-        cursor = self.collection.find(query)
+        cursor = self.collection.find(query, {"_id": 0})
         async for document in cursor:
             yield document
 

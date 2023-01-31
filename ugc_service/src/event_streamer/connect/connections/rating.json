@@ -8,7 +8,7 @@
     "errors.deadletterqueue.topic.name": "",
     "errors.deadletterqueue.context.headers.enable": "true",
     "connection.uri": "mongodb://mongodb:27017",
-    "database": "events",
+    "database": "movies",
     "collection": "rating",
     "max.num.retries": "5",
     "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneDefaultStrategy",

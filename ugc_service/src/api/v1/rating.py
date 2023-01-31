@@ -1,12 +1,10 @@
 from http import HTTPStatus
-from typing import Dict, List, Type
-
-from fastapi import APIRouter, Depends, HTTPException, Path
+from typing import Dict, List
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
-from models.base_mongo import PyObjectId
-from models.rating import MovieRating, Rating, ReviewRating
+from fastapi import APIRouter, Depends, HTTPException
+from models.rating import Rating
 from models.user import User
 from services.base_service import EventService, get_event_service
 from services.rating_service import RatingService, get_rating_service
@@ -14,31 +12,22 @@ from services.rating_service import RatingService, get_rating_service
 router = APIRouter()
 
 
-async def get_ratings(
-    filter: Dict,
-    rating_class: Type[Rating],
-    rating_service: RatingService = get_rating_service(),
-) -> List[Rating]:
-    ratings = rating_service.find(filter)
-    return [rating_class(**review) async for review in ratings]
-
-
 @router.post(
-    "/movie/{movie_id}",
+    "/{source_id}",
     summary="Создание оценки фильма",
     description="Создание оценки фильма от пользователя.",
     response_description="Статус обработки данных",
 )
 @exception_handler
-async def add_movie_rating(
-    event: MovieRating,
-    movie_id: str,
+async def add_rating(
+    event: Rating,
+    source_id: str,
     event_service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
 ):
     """Processing getting event data.
     Args:
-        movie_id: Id current film.
+        source_id: Id current film.
         event: event data.
         request: request value.
         event_service: login execution by endpoint.
@@ -47,69 +36,30 @@ async def add_movie_rating(
         Execution status.
     """
     event.user_id = str(user_id)
-    event.movie_id = movie_id
+    event.source_id = source_id
 
-    await event_service.produce(key=movie_id, topic_name="rating", data=event)
+    await event_service.produce(key=source_id, topic_name="rating", data=event)
     return HTTPStatus.CREATED
 
 
-@router.get("/movie/{movie_id}")
+@router.get("/{source_id}")
 @exception_handler
-async def get_all_movie_ratings(movie_id: str) -> List[Rating]:
-    return await get_ratings({"movie_id": movie_id}, MovieRating)
+async def get_ratings(
+    source_id: str, rating_service: RatingService = Depends(get_rating_service)
+) -> List[Dict]:
+    ratings = rating_service.find({"source_id": source_id})
+    return [review async for review in ratings]
 
 
-@router.delete("/movie/{movie_id}")
-@exception_handler
-async def delete_movie_rating(
-    movie_id: str,
-    rating_service: RatingService = Depends(get_rating_service),
-    user_id: User = Depends(JWTBearer()),
-):
-    result = await rating_service.delete_one(
-        {"movie_id": movie_id, "user_id": str(user_id)}
-    )
-    if result:
-        return HTTPStatus.NO_CONTENT
-    raise HTTPException(status_code=404, detail="Rating not found")
-
-
-@router.post(
-    "/review/{review_id}",
-)
-@exception_handler
-async def add_review_rating(
-    event: ReviewRating,
-    review_id: PyObjectId = Path(..., alias="review_id"),
-    event_service: EventService = Depends(get_event_service),
-    rating_service: RatingService = Depends(get_rating_service),
-    user_id: User = Depends(JWTBearer()),
-):
-    event.user_id = str(user_id)
-    event.review_id = review_id
-
-    # await rating_service.insert_one(event.dict())
-    await event_service.produce(key=str(review_id), topic_name="rating", data=event)
-    return HTTPStatus.CREATED
-
-
-@router.get("/review/{review_id}")
-@exception_handler
-async def get_all_review_ratings(
-    review_id: PyObjectId = Path(..., alias="review_id")
-) -> List[Rating]:
-    return await get_ratings({"review_id": review_id}, ReviewRating)
-
-
-@router.delete("/review/{rating_id}")
+@router.delete("/{source_id}")
 @exception_handler
 async def delete_review_rating(
-    rating_id: PyObjectId = Path(..., alias="rating_id"),
+    source_id: str,
     rating_service: RatingService = Depends(get_rating_service),
     user_id: User = Depends(JWTBearer()),
 ):
     result = await rating_service.delete_one(
-        {"id": rating_id, "user_id": str(user_id)}
+        {"source_id": source_id, "user_id": str(user_id)}
     )
     if result:
         return HTTPStatus.NO_CONTENT

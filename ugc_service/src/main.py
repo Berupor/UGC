@@ -1,19 +1,18 @@
 import logging
 
+import logstash
 import uvicorn
+from api.v1 import bookmarks, events, rating, review
+from api.v1.utils.decorators import exception_handler
+from core import exceptions
+from core.config import settings
+from core.logger import LOGGING
+from event_streamer.connect.create_connections import init_connections
+from event_streamer.kafka_streamer import kafka_client
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 from logstash_async.handler import AsynchronousLogstashHandler
-import logstash
-
-from api.v1 import bookmarks, events, rating, review
-from api.v1.utils.decorators import exception_handler
-from event_streamer.connect.create_connections import init_connections
-from core import exceptions
-from core.config import settings
-from event_streamer.kafka_streamer import kafka_client
-from core.logger import LOGGING
 
 app = FastAPI(
     title="API для получения и обработки данных пользовательского поведения",
@@ -50,9 +49,7 @@ async def startup():
     logger.setLevel(logging.INFO)
     logger.addHandler(
         logstash.LogstashHandler(
-            settings.logstash.host,
-            settings.logstash.port,
-            version=1,
+            settings.logstash.host, settings.logstash.port, version=1,
         )
     )
 

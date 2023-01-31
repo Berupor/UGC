@@ -39,6 +39,7 @@ class MongoSettings(BaseSettings):
     username: str
     password: str
 
+
 class Logstash(BaseSettings):
     host: str
     port: int

@@ -1,6 +1,5 @@
-from pydantic import Field
-
 from models.base_mongo import BaseMongoModel
+from pydantic import Field
 
 
 class Bookmark(BaseMongoModel):
