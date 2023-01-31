@@ -25,7 +25,7 @@ async def bookmarks(
     request: Request,
     service: EventService = Depends(get_event_service),
     user_id: User = Depends(JWTBearer()),
-) -> Tuple[str, int]:
+):
     """Processing received event data.
     Args:
         movie_id: Id current film.
@@ -36,7 +36,7 @@ async def bookmarks(
     Returns:
         Execution status.
     """
-    event.user_id = user_id
+    event.user_id = str(user_id)
     event.movie_id = movie_id
 
     await service.produce(key=movie_id, topic_name="bookmarks", data=event)

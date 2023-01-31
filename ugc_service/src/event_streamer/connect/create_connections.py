@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from typing import Generator
 from http import HTTPStatus
 
 import aiohttp
@@ -10,7 +11,7 @@ from core.config import settings
 logging.basicConfig(level=logging.INFO)
 
 
-def read_properties_files(path: str) -> dict:
+def read_properties_files(path: str) -> Generator:
     for file_connect in os.listdir(path):
         with open(os.path.join(path, file_connect)) as fs:
             yield json.load(fs), file_connect
