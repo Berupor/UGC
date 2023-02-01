@@ -33,4 +33,5 @@ motor==3.1.1
 pymongo==4.3.3
 python-logstash==0.4.8
 python-logstash-async==2.5.0
-flake8==4.0.1
+wemake-python-styleguide==0.17.0
+flake8-html==0.4.3
