@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Tuple
+from typing import List, Dict
 
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
@@ -48,7 +48,7 @@ async def bookmarks(
 async def get_all_bookmarks(
     user_id: User = Depends(JWTBearer()),
     bookmarks_service: BookmarksService = Depends(get_bookmarks_service),
-) -> list[dict]:
+) -> List[Dict]:
     bookmarks = bookmarks_service.find({"user_id": user_id})
     return [bookmark async for bookmark in bookmarks]
 
