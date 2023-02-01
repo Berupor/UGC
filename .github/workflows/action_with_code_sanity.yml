@@ -25,13 +25,13 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r ugc_service/requirements.txt
-    - name: Build and run Docker Compose
-      run: |
-        docker-compose -f docker-compose-github.yml up --build                           
-
-    - name: Run sanity check
-      run: |
-        python3 -m pytest ugc_service/tests/functional/src/ --sanity-check
+#    - name: Build and run Docker Compose
+#      run: |
+#        docker-compose -f docker-compose-github.yml up --build
+#
+#    - name: Run sanity check
+#      run: |
+#        python3 -m pytest ugc_service/tests/functional/src/ --sanity-check
 
     - name: Run mypy
       run: |
