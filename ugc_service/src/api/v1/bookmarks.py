@@ -14,9 +14,9 @@ router = APIRouter()
 
 @router.post(
     "/{movie_id}",
-    summary="Закладки пользователя",
-    description="",
-    response_description="",
+    summary="Добавление фильма в закладки.",
+    description="Добавление текущего фильма в закладки пользователя.",
+    response_description="Статус обработки данных",
 )
 @exception_handler
 async def bookmarks(
@@ -44,7 +44,12 @@ async def bookmarks(
     return HTTPStatus.CREATED
 
 
-@router.get("")
+@router.get(
+    "",
+    summary="Получение фильмов, добавленных в закладки.",
+    description="Получение всех фильмов, которые пользователь ранее добавил в закладки.",
+    response_description="Статус обработки данных"
+)
 async def get_all_bookmarks(
     user_id: User = Depends(JWTBearer()),
     bookmarks_service: BookmarksService = Depends(get_bookmarks_service),
@@ -53,7 +58,12 @@ async def get_all_bookmarks(
     return [bookmark async for bookmark in bookmarks]
 
 
-@router.delete("/{movie_id}")
+@router.delete(
+    "/{movie_id}",
+    summary="Удаление фильма из закладок.",
+    description="Убрать текущей фильм из списка 'закладки'.",
+    response_description="Статус обработки данных"
+)
 async def delete_movie_rating(
     movie_id: str,
     bookmarks_service: BookmarksService = Depends(get_bookmarks_service),

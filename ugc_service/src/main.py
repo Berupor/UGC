@@ -13,6 +13,8 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 from logstash_async.handler import AsynchronousLogstashHandler
+from motor.motor_asyncio import AsyncIOMotorClient
+from services import base_mongo_service
 
 app = FastAPI(
     title="API для получения и обработки данных пользовательского поведения",
@@ -44,6 +46,9 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 @app.on_event("startup")
 async def startup():
     await init_connections()
+    base_mongo_service.mongo_client = AsyncIOMotorClient(
+        f"mongodb://{settings.mongo.host}:{settings.mongo.port}/"
+    )
     # init_ch()
     logger = logging.getLogger("uvicorn.access")
     logger.setLevel(logging.INFO)
@@ -58,7 +63,7 @@ async def startup():
 async def shutdown():
     await kafka_client.stop_producer()
     await kafka_client.stop_consumer()
-
+    base_mongo_service.mongo_client.close()
     logging.info("closed redis connection.")
 
 

@@ -31,6 +31,8 @@ services:
   ugc:
     build: ugc_service
     restart: always
+    depends_on:
+      - connect
     expose:
       - "8000"
     networks:
@@ -111,82 +113,82 @@ services:
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
       KAFKA_JMX_PORT: 9102
       KAFKA_JMX_HOSTNAME: localhost
+#
+#  clickhouse-node1:
+#    image: yandex/clickhouse-server:21.7.4
+#    container_name: clickhouse-node1
+#    hostname: clickhouse-node1
+#    expose:
+#      - "8123"
+#      - "9000"
+#    networks:
+#      - clickhouse
+#    volumes:
+#      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
+#    depends_on:
+#      - zookeeper
 
-  clickhouse-node1:
-    image: yandex/clickhouse-server:21.7.4
-    container_name: clickhouse-node1
-    hostname: clickhouse-node1
-    expose:
-      - "8123"
-      - "9000"
+  mongodb:
+    image: mongo:4.2-rc-bionic
+    hostname: mongodb
+    container_name: mongodb
     networks:
-      - clickhouse
-    volumes:
-      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
-    depends_on:
-      - zookeeper
-
-  clickhouse-node2:
-    image: yandex/clickhouse-server:21.7.4
-    container_name: clickhouse-node2
-    hostname: clickhouse-node2
-    networks:
-      - clickhouse
-    volumes:
-      - ./ugc_service/src/db/clickhouse/data/node2:/etc/clickhouse-server
+      - mongodb
     depends_on:
       - broker
       - connect
     expose:
       - "27017"
+    ports:
+      - "27017:27017"
 
-  filebeat:
-    image: elastic/filebeat:7.17.5
-    command: filebeat -e -strict.perms=false
-    networks:
-      - filebeat
-    volumes:
-      - /tmp/logs/nginx:/var/log/nginx:ro
-      - ./loggin_service/deploy/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-    depends_on:
-      - ugc
-      - nginx
-
-  logstash:
-      image: logstash:7.10.1
-      networks:
-        - logstash
-      depends_on:
-        - elasticsearch
-      environment:
-        XPACK_MONITORING_ENABLED: "false"
-        ES_HOST: "elasticsearch:9200"
-      expose:
-        - "5044"
-      volumes:
-        - ./loggin_service/deploy/logstash.conf:/config/logstash.conf:ro
-      command: logstash -f /config/logstash.conf
-
-  elasticsearch:
-    image: elastic/elasticsearch:7.17.6
-    networks:
-      - elasticsearch
-    environment:
-      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
-      - discovery.type=single-node
-    expose:
-      - "9200"
-    volumes:
-      - /tmp/esdata:/tmp/elasticsearch/data
-
-  kibana:
-      image: elastic/kibana:7.17.6
-      networks:
-        - kibana
-      ports:
-        - "5601:5601"
-      depends_on:
-        - elasticsearch
+#  filebeat:
+#    image: elastic/filebeat:7.17.5
+#    command: filebeat -e -strict.perms=false
+#    networks:
+#      - filebeat
+#    volumes:
+#      - /tmp/logs/nginx:/var/log/nginx:ro
+#      - ./loggin_service/deploy/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+#    depends_on:
+#      - ugc
+#      - nginx
+#
+#  logstash:
+#      image: logstash:7.10.1
+#      networks:
+#        - logstash
+#      depends_on:
+#        - elasticsearch
+#      environment:
+#        XPACK_MONITORING_ENABLED: "false"
+#        ES_HOST: "elasticsearch:9200"
+#      expose:
+#        - "5044"
+#      volumes:
+#        - ./loggin_service/deploy/logstash.conf:/config/logstash.conf:ro
+#      command: logstash -f /config/logstash.conf
+#
+#  elasticsearch:
+#    image: elastic/elasticsearch:7.17.6
+#    networks:
+#      - elasticsearch
+#    environment:
+#      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+#      - discovery.type=single-node
+#    expose:
+#      - "9200"
+#    volumes:
+#      - /tmp/esdata:/tmp/elasticsearch/data
+#
+#  kibana:
+#      image: elastic/kibana:7.17.6
+#      networks:
+#        - kibana
+#      ports:
+#        - "5601:5601"
+#      depends_on:
+#        - elasticsearch
 
 networks:
   nginx:
@@ -197,15 +199,19 @@ networks:
     name: ugc_net
   broker:
     name: ugc_net
-  clickhouse:
+  schema-registry:
     name: ugc_net
+  connect:
+    name: ugc_net
+#  clickhouse:
+#    name: ugc_net
   mongodb:
     name: ugc_net
-  filebeat:
-    name: ugc_net
-  logstash:
-    name: ugc_net
-  elasticsearch:
-    name: ugc_net
-  kibana:
-    name: ugc_net
+#  filebeat:
+#    name: ugc_net
+#  logstash:
+#    name: ugc_net
+#  elasticsearch:
+#    name: ugc_net
+#  kibana:
+#    name: ugc_net

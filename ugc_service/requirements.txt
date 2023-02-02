@@ -35,3 +35,5 @@ python-logstash==0.4.8
 python-logstash-async==2.5.0
 wemake-python-styleguide==0.17.0
 flake8-html==0.4.3
+aiohttp==3.8.3
+backoff==2.2.1
