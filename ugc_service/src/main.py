@@ -68,9 +68,9 @@ async def shutdown():
 
 
 app.include_router(events.router, prefix="/api/v1/events", tags=["Запись событий"])
-app.include_router(review.router, prefix="/api/v1/reviews", tags=["Review"])
-app.include_router(rating.router, prefix="/api/v1/rating", tags=["Rating"])
-app.include_router(bookmarks.router, prefix="/api/v1/bookmarks", tags=["Bookmarks"])
+app.include_router(review.router, prefix="/api/v1/reviews", tags=["Рецензии"])
+app.include_router(rating.router, prefix="/api/v1/rating", tags=["Рейтинг"])
+app.include_router(bookmarks.router, prefix="/api/v1/bookmarks", tags=["Закладки"])
 if __name__ == "__main__":
     uvicorn.run(
         "main:app", host=settings.fastapi.host, port=settings.fastapi.port, reload=True
