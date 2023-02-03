@@ -8,7 +8,8 @@ services:
       - nginx
     volumes:
       - ./ugc_service/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ugc_service/src/nginx/configs:/etc/nginx/conf.d:ro
+      - ./ugc_service/src/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./tmp/logs/nginx/:/var/log/nginx/
     depends_on:
       - ugc
     ports:
