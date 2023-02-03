@@ -54,6 +54,7 @@ LOGGING = {
             "ssl_enable": False,
             "ssl_verify": False,
             "database_path": "./logstash.db",
+            "tags": ['ugc'],
         },
     },
     "loggers": {

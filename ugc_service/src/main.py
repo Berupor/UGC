@@ -54,9 +54,10 @@ async def startup():
     logger.setLevel(logging.INFO)
     logger.addHandler(
         logstash.LogstashHandler(
-            settings.logstash.host, settings.logstash.port, version=1,
+            settings.logstash.host, settings.logstash.port, version=1, tags=['ugc']
         )
     )
+    logging.info("info", extra={'tags': 'ugc'})
 
 
 @app.on_event("shutdown")
