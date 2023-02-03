@@ -1,10 +1,9 @@
 import asyncio
 import json
+from typing import AsyncGenerator
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer  # type: ignore
-
 from core.config import settings
-from typing import AsyncGenerator
 
 
 class KafkaClient:

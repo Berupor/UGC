@@ -3,7 +3,7 @@ import http
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-from functional.config import settings
+from ugc_service.tests.functional.config import settings
 from ugc_service.src.api.v1.rating import router
 
 client = TestClient(router)

@@ -1,10 +1,9 @@
 from json import loads
-from typing import Any, AsyncGenerator, Dict, Union
-
-from fastapi import Depends
-from pydantic import BaseModel
+from typing import Any, AsyncGenerator, Coroutine, Dict, Union
 
 from event_streamer.kafka_streamer import KafkaClient, get_kafka
+from fastapi import Depends
+from pydantic import BaseModel
 
 
 class EventService:

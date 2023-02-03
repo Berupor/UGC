@@ -1,7 +1,6 @@
 from bson import ObjectId
-from pydantic import Field as PydanticField
-
 from models.base import BaseEventModel
+from pydantic import Field as PydanticField
 
 
 class PyObjectId(ObjectId):

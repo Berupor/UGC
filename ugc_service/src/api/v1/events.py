@@ -1,10 +1,9 @@
 from http import HTTPStatus
 from typing import Tuple
 
-from fastapi import APIRouter, Depends, Request
-
 from api.v1.utils.auth_bearer import JWTBearer
 from api.v1.utils.decorators import exception_handler
+from fastapi import APIRouter, Depends, Request
 from models.film_watch import FilmWatchEvent
 from models.user import User
 from services.base_service import EventService, get_event_service

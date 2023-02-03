@@ -1,19 +1,4 @@
 services:
-  nginx:
-    image: nginx:latest
-    restart: always
-    expose:
-      - "80"
-    networks:
-      - nginx
-    volumes:
-      - ./ugc_service/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ugc_service/src/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./tmp/logs/nginx/:/var/log/nginx/
-    depends_on:
-      - ugc
-    ports:
-      - "80:80"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.1.2
@@ -27,35 +12,20 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-      ALLOW_ANONYMOUS_LOGIN: yes
-
-  ugc:
-    build: ugc_service
-    restart: always
-    depends_on:
-      - logstash
-      - connect
-    expose:
-      - "8000"
-    networks:
-      - ugc
-    env_file:
-      - ./.env.prod
-    logging:
-      driver: gelf
-      options:
-        tag: ugc
-        gelf-address: udp://0.0.0.0:5046
+      ALLOW_ANONYMOUS_LOGIN: "yes"
 
   broker:
     image: confluentinc/cp-kafka:7.1.2
+    hostname: broker
     container_name: broker
     depends_on:
       - zookeeper
-    expose:
-      - "29092"
-      - "9092"
-      - "9192"
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+      - "9192:9192"
+    #    volumes:
+    #      - ./confluent/kafka/data:/var/lib/kafka/data
     networks:
       - broker
     environment:
@@ -68,24 +38,74 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_ADVERTISED_HOST_NAME: broker
-      ALLOW_PLAINTEXT_LISTENER: yes
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.0.1
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
-      - broker
-    networks:
-      - schema-registry
-    expose:
-      - "8081"
+      - zookeeper
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_ADVERTISED_HOST_NAME=broker
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENERS=OUTSIDE://:9092,INSIDE://:9192
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=OUTSIDE:PLAINTEXT,INSIDE:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=OUTSIDE://localhost:9092,INSIDE://broker:9192
+      - KAFKA_INTER_BROKER_LISTENER_NAME=OUTSIDE
+
+  clickhouse-node1:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node1
+    hostname: clickhouse-node1
+    expose:
+      - "8123"
+      - "9000"
+    networks:
+      - clickhouse
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse-node2:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node2
+    hostname: clickhouse-node2
+    networks:
+      - clickhouse
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node2:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse-node3:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node3
+    hostname: clickhouse-node3
+    networks:
+      - clickhouse
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node3:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse-node4:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse-node4
+    hostname: clickhouse-node4
+    networks:
+      - clickhouse
+    volumes:
+      - ./ugc_service/src/db/clickhouse/data/node4:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
 
   connect:
     image: cnfldemos/cp-server-connect-datagen:0.4.0-6.0.1
@@ -121,20 +141,6 @@ services:
       KAFKA_JMX_PORT: 9102
       KAFKA_JMX_HOSTNAME: localhost
 
-  clickhouse-node1:
-    image: yandex/clickhouse-server:21.7.4
-    container_name: clickhouse-node1
-    hostname: clickhouse-node1
-    expose:
-      - "8123"
-      - "9000"
-    networks:
-      - clickhouse
-    volumes:
-      - ./ugc_service/src/db/clickhouse/data/node1:/etc/clickhouse-server
-    depends_on:
-      - zookeeper
-
   mongodb:
     image: mongo:4.2-rc-bionic
     hostname: mongodb
@@ -146,80 +152,18 @@ services:
       - connect
     expose:
       - "27017"
+    ports:
+      - 27017:27017
 
-  filebeat:
-    image: elastic/filebeat:7.17.5
-    command: filebeat -e -strict.perms=false
-    networks:
-      - filebeat
-    volumes:
-      - /tmp/logs/nginx:/var/log/nginx:ro
-      - ./loggin_service/deploy/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-    depends_on:
-      - ugc
-      - nginx
-
-  logstash:
-      image: logstash:7.10.1
-      hostname: logstash
-      container_name: logstash
-      networks:
-        - logstash
-      depends_on:
-        - elasticsearch
-      environment:
-        XPACK_MONITORING_ENABLED: "false"
-        ES_HOST: "elasticsearch:9200"
-      expose:
-        - "5044"
-        - "5046"
-      volumes:
-        - ./loggin_service/deploy/logstash.conf:/config/logstash.conf:ro
-      command: logstash -f /config/logstash.conf
-
-  elasticsearch:
-    image: elastic/elasticsearch:7.17.6
-    networks:
-      - elasticsearch
-    environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - discovery.type=single-node
-    expose:
-      - "9200"
-    volumes:
-      - /tmp/esdata:/tmp/elasticsearch/data
-
-  kibana:
-      image: elastic/kibana:7.17.6
-      networks:
-        - kibana
-      ports:
-        - "5601:5601"
-      depends_on:
-        - elasticsearch
 
 networks:
-  nginx:
+  connect:
     name: ugc_net
-  ugc:
+  mongodb:
     name: ugc_net
   zookeeper:
     name: ugc_net
   broker:
     name: ugc_net
-  schema-registry:
-    name: ugc_net
-  connect:
-    name: ugc_net
   clickhouse:
-    name: ugc_net
-  mongodb:
-    name: ugc_net
-  filebeat:
-    name: ugc_net
-  logstash:
-    name: ugc_net
-  elasticsearch:
-    name: ugc_net
-  kibana:
     name: ugc_net
