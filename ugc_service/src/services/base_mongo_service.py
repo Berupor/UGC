@@ -1,20 +1,20 @@
-from typing import AsyncGenerator, Dict
+from typing import AsyncGenerator, Dict, Optional
 
-from core.config import settings
-from motor.motor_asyncio import AsyncIOMotorClient  # type: ignore
+from motor.motor_asyncio import AsyncIOMotorClient
+
+mongo_client: Optional[AsyncIOMotorClient] = None
+
+
+async def get_database_conn() -> Optional[AsyncIOMotorClient]:
+    """Вернуть подключение к mongodb, если оно создано, иначе None."""
+    return mongo_client
 
 
 class BaseMongoService:
-    def __init__(
-        self,
-        db_name,
-        collection_name,
-        host=settings.mongo.host,
-        port=settings.mongo.port,
-    ):
+    def __init__(self, db_name, collection_name, client: AsyncIOMotorClient):
         self.db_name = db_name
         self.collection_name = collection_name
-        self.client = AsyncIOMotorClient(f"mongodb://{host}:{port}/")
+        self.client: AsyncIOMotorClient = client
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 

@@ -12,7 +12,12 @@ from services.review_service import ReviewService, get_review_service
 router = APIRouter()
 
 
-@router.post("/{movie_id}")
+@router.post(
+    "/{movie_id}",
+    summary="Создание рецензии на фильм.",
+    description="Пользователь создаёт рецензию на выбранный фильм",
+    response_description="Статус обработки данных",
+)
 @exception_handler
 async def add_review(
     movie_id: str,
@@ -28,7 +33,12 @@ async def add_review(
     return HTTPStatus.CREATED
 
 
-@router.get("/{movie_id}")
+@router.get(
+    "/{movie_id}",
+    summary="Получение рецензии на фильм.",
+    description="Получение всех созданных рецензиий на выбранный фильм.",
+    response_description="Статус обработки данных",
+)
 @exception_handler
 async def get_all_reviews(
     movie_id: str,
@@ -43,7 +53,12 @@ async def get_all_reviews(
     return [review async for review in reviews]
 
 
-@router.delete("/{review_id}")
+@router.delete(
+    "/{review_id}",
+    summary="Удаление рецензии.",
+    description="Удаление выбранной рецензии.",
+    response_description="Статус обработки данных",
+)
 @exception_handler
 async def delete_review(
     review_id: str,

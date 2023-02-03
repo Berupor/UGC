@@ -1,5 +1,5 @@
 from json import loads
-from typing import Any, AsyncGenerator, Dict, Union, Coroutine
+from typing import Any, AsyncGenerator, Coroutine, Dict, Union
 
 from event_streamer.kafka_streamer import KafkaClient, get_kafka
 from fastapi import Depends

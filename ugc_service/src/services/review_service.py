@@ -1,13 +1,15 @@
 from typing import AsyncGenerator
 
-from .base_mongo_service import BaseMongoService
-from .rating_service import get_rating_service
+from fastapi import Depends
+from motor.motor_asyncio import AsyncIOMotorClient
+
+from .base_mongo_service import BaseMongoService, get_database_conn
 
 
 class ReviewService(BaseMongoService):
-    def __init__(self, db_name, collection_name):
-        super().__init__(db_name, collection_name)
-        self.rating_service = get_rating_service()
+    def __init__(self, db_name, collection_name, database_conn):
+        super().__init__(db_name, collection_name, database_conn)
+        self.rating_service = database_conn
 
     async def find(self, query, sort_field="", order="") -> AsyncGenerator:
         """Find all documents that match the query"""
@@ -53,5 +55,7 @@ class ReviewService(BaseMongoService):
             yield document
 
 
-def get_review_service() -> ReviewService:
-    return ReviewService("movies", "reviews")
+def get_review_service(
+    database_conn: AsyncIOMotorClient = Depends(get_database_conn),
+) -> ReviewService:
+    return ReviewService("movies", "reviews", database_conn)

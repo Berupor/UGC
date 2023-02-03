@@ -31,12 +31,20 @@ services:
   ugc:
     build: ugc_service
     restart: always
+    depends_on:
+      - logstash
+      - connect
     expose:
       - "8000"
     networks:
       - ugc
     env_file:
       - ./.env.prod
+    logging:
+      driver: gelf
+      options:
+        tag: ugc
+        gelf-address: udp://0.0.0.0:5046
 
   broker:
     image: confluentinc/cp-kafka:7.1.2
@@ -126,14 +134,12 @@ services:
     depends_on:
       - zookeeper
 
-  clickhouse-node2:
-    image: yandex/clickhouse-server:21.7.4
-    container_name: clickhouse-node2
-    hostname: clickhouse-node2
+  mongodb:
+    image: mongo:4.2-rc-bionic
+    hostname: mongodb
+    container_name: mongodb
     networks:
-      - clickhouse
-    volumes:
-      - ./ugc_service/src/db/clickhouse/data/node2:/etc/clickhouse-server
+      - mongodb
     depends_on:
       - broker
       - connect
@@ -154,6 +160,8 @@ services:
 
   logstash:
       image: logstash:7.10.1
+      hostname: logstash
+      container_name: logstash
       networks:
         - logstash
       depends_on:
@@ -163,6 +171,7 @@ services:
         ES_HOST: "elasticsearch:9200"
       expose:
         - "5044"
+        - "5046"
       volumes:
         - ./loggin_service/deploy/logstash.conf:/config/logstash.conf:ro
       command: logstash -f /config/logstash.conf
@@ -172,7 +181,7 @@ services:
     networks:
       - elasticsearch
     environment:
-      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.type=single-node
     expose:
       - "9200"
@@ -196,6 +205,10 @@ networks:
   zookeeper:
     name: ugc_net
   broker:
+    name: ugc_net
+  schema-registry:
+    name: ugc_net
+  connect:
     name: ugc_net
   clickhouse:
     name: ugc_net

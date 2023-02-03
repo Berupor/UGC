@@ -14,8 +14,8 @@ router = APIRouter()
 
 @router.post(
     "/{source_id}",
-    summary="Создание оценки фильма",
-    description="Создание оценки фильма от пользователя.",
+    summary="Создание оценки фильма или рецензии",
+    description="Пользователь передаёт оценку на фильм или рецензию. Выбор объекта оценки определяется параметрами body. ",
     response_description="Статус обработки данных",
 )
 @exception_handler
@@ -42,7 +42,12 @@ async def add_rating(
     return HTTPStatus.CREATED
 
 
-@router.get("/{source_id}")
+@router.get(
+    "/{source_id}",
+    summary="Получение оценки фильма или рецензии",
+    description="Пользователь получает все оценки на фильм или рецензию. Выбор объекта оценки определяется параметрами body. ",
+    response_description="Статус обработки данных",
+)
 @exception_handler
 async def get_ratings(
     source_id: str, rating_service: RatingService = Depends(get_rating_service)
@@ -51,7 +56,12 @@ async def get_ratings(
     return [review async for review in ratings]
 
 
-@router.delete("/{source_id}")
+@router.delete(
+    "/{source_id}",
+    summary="Удаление оценки фильма или рецензии",
+    description="Удаление оценки на фильм или рецензию. Выбор объекта оценки определяется параметрами body. ",
+    response_description="Статус обработки данных",
+)
 @exception_handler
 async def delete_review_rating(
     source_id: str,
