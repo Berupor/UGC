@@ -20,6 +20,7 @@ async def add_review(
     movie_id: str,
     event: ShortReview,
     event_service: EventService = Depends(get_event_service),
+    review_service: ReviewService = Depends(get_review_service),
     user_id: User = Depends(JWTBearer()),
 ):
     event.user_id = str(user_id)
