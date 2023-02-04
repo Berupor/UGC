@@ -1,8 +1,8 @@
 import asyncio
 import json
+from typing import AsyncGenerator
 
-from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
-
+from aiokafka import AIOKafkaConsumer, AIOKafkaProducer  # type: ignore
 from core.config import settings
 
 
@@ -81,7 +81,7 @@ class KafkaClient:
         self,
         topic,
         group_id=None,
-    ):
+    ) -> AsyncGenerator:
         if not self.consumer:
             await self._start_consumer(topic, group_id)
 

@@ -19,7 +19,7 @@ class FastapiSettings(BaseSettings):
     project_name: str
     secret_key: str
     host: str
-    port: str
+    port: int
 
 
 class KafkaSettings(BaseSettings):
@@ -28,16 +28,37 @@ class KafkaSettings(BaseSettings):
     topic: str
 
 
+class ConnectSettings(BaseSettings):
+    host: str
+    port: int
+
+
+class MongoSettings(BaseSettings):
+    host: str
+    port: int
+    username: str
+    password: str
+
+
+class Logstash(BaseSettings):
+    host: str
+    port: int
+
+
 class Settings(BaseSettings):
     token_algo: str
 
     fastapi: FastapiSettings
+    connect: ConnectSettings
+    mongo: MongoSettings
     kafka: KafkaSettings
     clickhouse: ClickHouseSettings
+    logstash: Logstash
 
     class Config:
         #  For local development outside of docker
         env_file = (
+            os.path.join(ENV_DIR, ".env.github"),
             os.path.join(ENV_DIR, ".env.prod"),
             os.path.join(ENV_DIR, ".env.dev"),
         )

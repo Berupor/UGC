@@ -1,0 +1,22 @@
+{
+  "name": "rating-mongo-sink-connector",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "tasks.max": "1",
+    "errors.log.include.messages": "true",
+    "topics": "rating",
+    "errors.deadletterqueue.topic.name": "",
+    "errors.deadletterqueue.context.headers.enable": "true",
+    "connection.uri": "mongodb://mongodb:27017",
+    "database": "movies",
+    "collection": "rating",
+    "max.num.retries": "5",
+    "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneDefaultStrategy",
+    "value.projection.type": "whitelist",
+    "value.projection.list": "user_id",
+    "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.PartialValueStrategy",
+    "document.id.strategy.overwrite.existing": "true",
+    "mongo.errors.tolerance": "all",
+    "mongo.errors.log.enable": "true"
+  }
+}
