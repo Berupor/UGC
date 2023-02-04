@@ -19,9 +19,7 @@ This is a high-load user-generated service built using FastAPI and utilizing a m
 
 ## API
 Main API:
-- $HOST/api/v1/reviews
-- $HOST/api/v1/likes
-- $HOST/api/v1/bookmarks
+- $HOST/api/v1/
 
 For more detailed usage and API documentation, please refer to
 - $HOST/api/openapi
