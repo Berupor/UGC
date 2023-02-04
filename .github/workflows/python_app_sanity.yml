@@ -2,9 +2,9 @@ name: Code Sanity Check and Mypy
 
 on:
   push:
-    branches: [ "dev-zelenov-strategy" ]
+    branches: [ "dev-zelenov-routes" ]
   pull_request:
-    branches: [ "dev-zelenov-strategy" ]
+    branches: [ "dev-zelenov-routes" ]
 
 jobs:
   build:
