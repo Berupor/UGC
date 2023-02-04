@@ -8,11 +8,13 @@ class MockMongoService:
         ...
 
     async def find(self, query, **kwargs):
-        result = [{"id": 1, "data": "The Shawshank Redemption"},
-                  {"id": 2, "data": "The Godfather"}]
+        result = [
+            {"id": 1, "data": "The Shawshank Redemption"},
+            {"id": 2, "data": "The Godfather"},
+        ]
 
         for item in result:
             yield item
 
     async def delete_one(self, query):
-        return 'Successfully deleted'
+        return "Successfully deleted"

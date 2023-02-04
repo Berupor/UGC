@@ -76,4 +76,3 @@ async def delete_movie_bookmark(
         return HTTPStatus.NO_CONTENT
     else:
         raise HTTPException(status_code=404, detail="Rating not found")
-
