@@ -22,7 +22,7 @@ Main API:
 - $HOST/api/v1/
 
 For more detailed usage and API documentation, please refer to
-- $HOST/api/openapi
+- $HOST/api/openapi/
 
 ## Team
 
