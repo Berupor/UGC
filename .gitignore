@@ -12,4 +12,4 @@
 /venv
 
 /ugc_service/src/db/producer.log
-/.mypy_cache/
+.mypy_cache

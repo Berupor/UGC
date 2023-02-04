@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-import pytest
 from fastapi.testclient import TestClient
 from functional.config import settings
 from pytest import MonkeyPatch
