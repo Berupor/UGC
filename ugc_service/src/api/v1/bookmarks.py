@@ -19,7 +19,7 @@ router = APIRouter()
     response_description="Статус обработки данных",
 )
 @exception_handler
-async def bookmarks(
+async def add_bookmark(
     event: Bookmark,
     movie_id,
     request: Request,
@@ -45,10 +45,10 @@ async def bookmarks(
 
 
 @router.get(
-    "",
+    "/",
     summary="Получение фильмов, добавленных в закладки.",
     description="Получение всех фильмов, которые пользователь ранее добавил в закладки.",
-    response_description="Статус обработки данных"
+    response_description="Статус обработки данных",
 )
 async def get_all_bookmarks(
     user_id: User = Depends(JWTBearer()),
@@ -62,9 +62,9 @@ async def get_all_bookmarks(
     "/{movie_id}",
     summary="Удаление фильма из закладок.",
     description="Убрать текущей фильм из списка 'закладки'.",
-    response_description="Статус обработки данных"
+    response_description="Статус обработки данных",
 )
-async def delete_movie_rating(
+async def delete_movie_bookmark(
     movie_id: str,
     bookmarks_service: BookmarksService = Depends(get_bookmarks_service),
     user_id: User = Depends(JWTBearer()),

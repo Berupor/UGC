@@ -77,7 +77,11 @@ class KafkaClient:
             topic, value, key, partition, timestamp_ms, headers
         )
 
-    async def consume_messages(self, topic, group_id=None,) -> AsyncGenerator:
+    async def consume_messages(
+        self,
+        topic,
+        group_id=None,
+    ) -> AsyncGenerator:
         if not self.consumer:
             await self._start_consumer(topic, group_id)
 

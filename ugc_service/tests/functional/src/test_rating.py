@@ -1,47 +1,45 @@
-import http
+from http import HTTPStatus
 
-from fastapi import HTTPException
 from fastapi.testclient import TestClient
+from pytest import MonkeyPatch
 
-from ugc_service.tests.functional.config import settings
-from ugc_service.src.api.v1.rating import router
+from api.v1.rating import router
+from functional.config import settings
+from services.base_service import EventService
+from services.rating_service import RatingService
+from .utils.mocks import MockEventService, MockMongoService
 
-client = TestClient(router)
-
-
-def test_add_movie_rating():
-    response = client.post(
-        "/movie/123",
-        json={"rating": 0},
-        headers={"Authorization": f"Bearer {settings.test_token}"},
-    )
-    assert response.json() == http.HTTPStatus.CREATED
+Client = TestClient(router)
 
 
-def test_get_all_movie_ratings():
-    response = client.get("/movie/123")
-    assert response.status_code == http.HTTPStatus.OK
-    assert isinstance(response.json(), list)
+class TestRating:
+    def test_add_rating(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr(EventService, "produce", MockEventService.mock_produce)
 
-
-def test_delete_movie_rating_unauthorized():
-    try:
-        client.delete("/movie/123")
-    except HTTPException as e:
-        assert e.status_code == 403
-
-    else:
-        raise Exception("Test failed")
-
-
-def test_delete_review_rating_not_found():
-    try:
-        client.delete(
-            "/review/63d7ba598ac5fd3a2bf4a489",
+        response = Client.post(
+            "/123",
+            json={"text": "True"},
             headers={"Authorization": f"Bearer {settings.test_token}"},
         )
-    except HTTPException as e:
-        assert e.status_code == 404
 
-    else:
-        raise Exception("Test failed")
+        assert response.json() == 201
+
+    def test_get_ratings(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr(RatingService, "__init__", MockMongoService.__init__)
+        monkeypatch.setattr(RatingService, "find", MockMongoService.find)
+        response = Client.get(
+            "/123", headers={"Authorization": f"Bearer {settings.test_token}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert all(isinstance(item, dict) for item in data)
+
+    def test_delete_rating(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr(RatingService, "__init__", MockMongoService.__init__)
+        monkeypatch.setattr(RatingService, "delete_one", MockMongoService.delete_one)
+
+        response = Client.delete(
+            "/123", headers={"Authorization": f"Bearer {settings.test_token}"}
+        )
+        assert response.json() == HTTPStatus.NO_CONTENT

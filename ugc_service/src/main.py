@@ -45,7 +45,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.on_event("startup")
 async def startup():
-    await init_connections()
+    # await init_connections()
     base_mongo_service.mongo_client = AsyncIOMotorClient(
         f"mongodb://{settings.mongo.host}:{settings.mongo.port}/"
     )
@@ -54,10 +54,10 @@ async def startup():
     logger.setLevel(logging.INFO)
     logger.addHandler(
         logstash.LogstashHandler(
-            settings.logstash.host, settings.logstash.port, version=1, tags=['ugc']
+            settings.logstash.host, settings.logstash.port, version=1, tags=["ugc"]
         )
     )
-    logging.info("info", extra={'tags': 'ugc'})
+    logging.info("info", extra={"tags": "ugc"})
 
 
 @app.on_event("shutdown")

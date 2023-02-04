@@ -2,9 +2,9 @@ name: Code Sanity Check and Mypy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "development", "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "development", "main" ]
 
 jobs:
   build:
@@ -26,12 +26,9 @@ jobs:
       run: |
         pip install -r ugc_service/requirements.txt
 
-    - name: Lint with flake8 (wemake-python-styleguide)
+    - name: Run sanity check
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --format=html --htmldir=flake-report
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        python3 -m pytest ugc_service/tests/functional/src/ 
 
     - name: Run mypy
       run: |

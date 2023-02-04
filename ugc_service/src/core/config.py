@@ -27,9 +27,11 @@ class KafkaSettings(BaseSettings):
     port: int
     topic: str
 
+
 class ConnectSettings(BaseSettings):
     host: str
     port: int
+
 
 class MongoSettings(BaseSettings):
     host: str
@@ -56,6 +58,7 @@ class Settings(BaseSettings):
     class Config:
         #  For local development outside of docker
         env_file = (
+            os.path.join(ENV_DIR, ".env.github"),
             os.path.join(ENV_DIR, ".env.prod"),
             os.path.join(ENV_DIR, ".env.dev"),
         )

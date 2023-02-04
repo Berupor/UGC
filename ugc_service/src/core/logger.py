@@ -25,7 +25,9 @@ LOGGING = {
             "message_type": "python-logstash",
             "fqdn": False,
             "extra_prefix": "dev",
-            "extra": {"environment": "production",},
+            "extra": {
+                "environment": "production",
+            },
         },
     },
     "handlers": {
@@ -54,12 +56,18 @@ LOGGING = {
             "ssl_enable": False,
             "ssl_verify": False,
             "database_path": "./logstash.db",
-            "tags": ['ugc'],
+            "tags": ["ugc"],
         },
     },
     "loggers": {
-        "": {"handlers": LOG_DEFAULT_HANDLERS, "level": "INFO",},
-        "uvicorn.error": {"level": "INFO", "handlers": ["logstash"],},
+        "": {
+            "handlers": LOG_DEFAULT_HANDLERS,
+            "level": "INFO",
+        },
+        "uvicorn.error": {
+            "level": "INFO",
+            "handlers": ["logstash"],
+        },
         "uvicorn.access": {
             "handlers": ["access"],
             "level": "INFO",

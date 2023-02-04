@@ -54,8 +54,6 @@ class Settings(BaseSettings):
         #  For local development outside of docker
         env_file = (
             os.path.join(ENV_DIR, ".env.github"),
-            os.path.join(ENV_DIR, ".env.prod"),
-            os.path.join(ENV_DIR, ".env.dev"),
         )
         env_nested_delimiter = "__"
 
