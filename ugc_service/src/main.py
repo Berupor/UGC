@@ -45,7 +45,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.on_event("startup")
 async def startup():
-    await init_connections()
+    # await init_connections()
     base_mongo_service.mongo_client = AsyncIOMotorClient(
         f"mongodb://{settings.mongo.host}:{settings.mongo.port}/"
     )

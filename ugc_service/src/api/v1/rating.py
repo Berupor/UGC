@@ -20,10 +20,10 @@ router = APIRouter()
 )
 @exception_handler
 async def add_rating(
-    event: Rating,
-    source_id: str,
-    event_service: EventService = Depends(get_event_service),
-    user_id: User = Depends(JWTBearer()),
+        event: Rating,
+        source_id: str,
+        event_service: EventService = Depends(get_event_service),
+        user_id: User = Depends(JWTBearer()),
 ):
     """Processing getting event data.
     Args:
@@ -50,7 +50,7 @@ async def add_rating(
 )
 @exception_handler
 async def get_ratings(
-    source_id: str, rating_service: RatingService = Depends(get_rating_service)
+        source_id: str, rating_service: RatingService = Depends(get_rating_service)
 ) -> List[Dict]:
     ratings = rating_service.find({"source_id": source_id})
     return [review async for review in ratings]
@@ -64,9 +64,9 @@ async def get_ratings(
 )
 @exception_handler
 async def delete_review_rating(
-    source_id: str,
-    rating_service: RatingService = Depends(get_rating_service),
-    user_id: User = Depends(JWTBearer()),
+        source_id: str,
+        rating_service: RatingService = Depends(get_rating_service),
+        user_id: User = Depends(JWTBearer()),
 ):
     result = await rating_service.delete_one(
         {"source_id": source_id, "user_id": str(user_id)}
